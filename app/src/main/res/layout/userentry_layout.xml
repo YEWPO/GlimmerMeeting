@@ -6,15 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".userentry.UserentryFragment">
 
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/userentryTabLayout"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="230dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="30dp"
         app:layout_constraintBottom_toTopOf="@+id/userentryViewPage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView4"
         tools:ignore="MissingConstraints" />
 
     <androidx.viewpager2.widget.ViewPager2
