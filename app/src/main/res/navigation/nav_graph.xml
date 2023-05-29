@@ -9,5 +9,15 @@
         android:id="@+id/userentryFragment"
         android:name="com.glimmer.glimmermeeting.userentry.UserentryFragment"
         android:label="UserentryFragment"
-        tools:layout="@layout/userentry_layout" />
+        tools:layout="@layout/userentry_layout" >
+        <action
+            android:id="@+id/userentryFragment_to_appFragment"
+            app:destination="@id/appFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/appFragment"
+        android:name="com.glimmer.glimmermeeting.app.AppFragment"
+        android:label="app_layout"
+        tools:layout="@layout/app_layout" />
 </navigation>
