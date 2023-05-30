@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.glimmer.glimmermeeting.MainActivity
 import com.glimmer.glimmermeeting.R
+import com.glimmer.glimmermeeting.app.AppFragment
 import com.squareup.moshi.JsonClass
 import okhttp3.Call
 import okhttp3.Callback
@@ -39,12 +40,12 @@ class LoginFragment : Fragment(R.layout.login_layout) {
 
     private fun checkInput(username: String, password: String) {
         if (username == "") {
-            Toast.makeText(this.context, "用户名为空", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "用户名为空", Toast.LENGTH_SHORT).show()
             return
         }
 
         if (password == "") {
-            Toast.makeText(this.context, "密码为空", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "密码为空", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -59,10 +60,11 @@ class LoginFragment : Fragment(R.layout.login_layout) {
 
             val loginJson = loginJsonAdapter.fromJson(msg.data.getString("json"))
 
-            Toast.makeText(context, loginJson?.message, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, loginJson!!.message, Toast.LENGTH_SHORT).show()
 
             if (msg.data.getBoolean("state")) {
-                Navigation.findNavController(requireView()).navigate(R.id.userentryFragment_to_appFragment)
+                val loginAction = UserentryFragmentDirections.userentryFragmentToAppFragment(loginJson.token!!)
+                Navigation.findNavController(requireView()).navigate(loginAction)
             }
         }
     }
