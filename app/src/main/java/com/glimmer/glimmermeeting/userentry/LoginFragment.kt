@@ -55,7 +55,11 @@ class LoginFragment : Fragment(R.layout.login_layout) {
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
 
-            Toast.makeText(context, msg.data.getString("message"), Toast.LENGTH_SHORT).show()
+            val loginJsonAdapter = MainActivity().moshi.adapter(LoginJson::class.java)
+
+            val loginJson = loginJsonAdapter.fromJson(msg.data.getString("json"))
+
+            Toast.makeText(context, loginJson?.message, Toast.LENGTH_SHORT).show()
 
             if (msg.data.getBoolean("state")) {
                 Navigation.findNavController(requireView()).navigate(R.id.userentryFragment_to_appFragment)
@@ -64,8 +68,6 @@ class LoginFragment : Fragment(R.layout.login_layout) {
     }
 
     private fun postLogin(username: String, password: String) {
-        val loginJsonAdapter = MainActivity().moshi.adapter(LoginJson::class.java)
-
         val loginBody = FormBody.Builder()
             .add("username", username)
             .add("password", password)
@@ -82,13 +84,11 @@ class LoginFragment : Fragment(R.layout.login_layout) {
 
             override fun onResponse(call: Call, response: Response) {
                 val loginState = response.isSuccessful
-                val loginJson = loginJsonAdapter.fromJson(response.body!!.string())
 
                 val loginMessage = obtain()
                 val loginBundle = Bundle()
                 loginBundle.putBoolean("state", loginState)
-                loginBundle.putString("message", loginJson!!.message)
-                loginBundle.putString("token", loginJson.token)
+                loginBundle.putString("json", response.body!!.string())
                 loginMessage.data = loginBundle
 
                 loginSuccessHandler.sendMessage(loginMessage)
