@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_app"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.glimmer.glimmermeeting.app.HomeFragment"
+        android:label="home_layout"
+        tools:layout="@layout/home_layout" />
+
+    <fragment
+        android:id="@+id/calendarFragment"
+        android:name="com.glimmer.glimmermeeting.app.CalendarFragment"
+        android:label="calendar_layout"
+        tools:layout="@layout/calendar_layout" />
+
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.glimmer.glimmermeeting.app.SettingFragment"
+        android:label="setting_layout"
+        tools:layout="@layout/setting_layout" />
+</navigation>

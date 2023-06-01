@@ -1,9 +1,7 @@
 package com.glimmer.glimmermeeting.userentry
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
@@ -11,18 +9,10 @@ import com.glimmer.glimmermeeting.R
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
-class UserentryFragment : Fragment() {
+class UserentryFragment : Fragment(R.layout.userentry_layout) {
     private lateinit var userentryFragmentStateAdapter: UserentryFragmentStateAdapter
     private lateinit var userentryViewPager: ViewPager2
     private lateinit var userentryTabLayout: TabLayout
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.userentry_layout, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         userentryFragmentStateAdapter = UserentryFragmentStateAdapter(this)
