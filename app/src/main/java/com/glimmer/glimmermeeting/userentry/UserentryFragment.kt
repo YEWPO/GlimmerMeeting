@@ -2,6 +2,7 @@ package com.glimmer.glimmermeeting.userentry
 
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
@@ -27,6 +28,8 @@ class UserentryFragment : Fragment(R.layout.userentry_layout) {
                 else -> null
             }
         }.attach()
+
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
     }
 }
 
