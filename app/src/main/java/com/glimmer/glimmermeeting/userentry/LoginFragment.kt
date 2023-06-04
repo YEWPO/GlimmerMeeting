@@ -122,21 +122,6 @@ class LoginFragment : Fragment(R.layout.login_layout) {
         passwordView = view.findViewById(R.id.loginPassword)
         loginButton = view.findViewById(R.id.loginButton)
 
-        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
-        val loginToken = sharedPref.getString("loginToken", null)
-
-        if (loginToken != null) {
-            val dateFormat = SimpleDateFormat("yyyy-MM-dd")
-            val loginDate = sharedPref.getString("loginTime", null)?.let { dateFormat.parse(it) }
-
-            val loginDiff = (Date().time - loginDate!!.time) / (1000 * 60 * 60 * 24)
-
-            if (loginDiff <= 30) {
-                val loginAction = UserentryFragmentDirections.userentryFragmentToAppFragment(loginToken)
-                requireParentFragment().findNavController().navigate(loginAction)
-            }
-        }
-
         loginButton.setOnClickListener {
             hideSoftInput(loginButton)
 

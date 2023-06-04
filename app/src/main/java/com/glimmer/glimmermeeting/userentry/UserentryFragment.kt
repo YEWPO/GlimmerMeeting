@@ -1,14 +1,18 @@
 package com.glimmer.glimmermeeting.userentry
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.glimmer.glimmermeeting.R
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class UserentryFragment : Fragment(R.layout.userentry_layout) {
     private lateinit var userentryFragmentStateAdapter: UserentryFragmentStateAdapter
@@ -30,6 +34,21 @@ class UserentryFragment : Fragment(R.layout.userentry_layout) {
         }.attach()
 
         activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
+
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+        val loginToken = sharedPref.getString("loginToken", null)
+
+        if (loginToken != null) {
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+            val loginDate = sharedPref.getString("loginTime", null)?.let { dateFormat.parse(it) }
+
+            val loginDiff = (Date().time - loginDate!!.time) / (1000 * 60 * 60 * 24)
+
+            if (loginDiff <= 30) {
+                val loginAction = UserentryFragmentDirections.userentryFragmentToAppFragment(loginToken)
+                Navigation.findNavController(view).navigate(loginAction)
+            }
+        }
     }
 }
 
