@@ -14,7 +14,9 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.glimmer.glimmermeeting.MainActivity
 import com.glimmer.glimmermeeting.R
 import com.glimmer.glimmermeeting.app.AppFragment
@@ -25,6 +27,8 @@ import okhttp3.FormBody
 import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class LoginFragment : Fragment(R.layout.login_layout) {
 
@@ -58,11 +62,21 @@ class LoginFragment : Fragment(R.layout.login_layout) {
 
             val loginJsonAdapter = MainActivity().moshi.adapter(LoginJson::class.java)
 
-            val loginJson = loginJsonAdapter.fromJson(msg.data.getString("json"))
+            val loginJson = msg.data.getString("json")?.let { loginJsonAdapter.fromJson(it) }
 
             Toast.makeText(context, loginJson!!.message, Toast.LENGTH_SHORT).show()
 
             if (msg.data.getBoolean("state")) {
+                val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+                with(sharedPref.edit()) {
+                    putString("loginToken", loginJson.token)
+
+                    val dataFormat = SimpleDateFormat("yyyy-MM-dd")
+                    putString("loginTime", dataFormat.format(Date()))
+
+                    apply()
+                }
+
                 val loginAction = UserentryFragmentDirections.userentryFragmentToAppFragment(loginJson.token!!)
                 Navigation.findNavController(requireView()).navigate(loginAction)
             }
@@ -107,6 +121,21 @@ class LoginFragment : Fragment(R.layout.login_layout) {
         usernameView = view.findViewById(R.id.loginUsername)
         passwordView = view.findViewById(R.id.loginPassword)
         loginButton = view.findViewById(R.id.loginButton)
+
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+        val loginToken = sharedPref.getString("loginToken", null)
+
+        if (loginToken != null) {
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+            val loginDate = sharedPref.getString("loginTime", null)?.let { dateFormat.parse(it) }
+
+            val loginDiff = (Date().time - loginDate!!.time) / (1000 * 60 * 60 * 24)
+
+            if (loginDiff <= 30) {
+                val loginAction = UserentryFragmentDirections.userentryFragmentToAppFragment(loginToken)
+                requireParentFragment().findNavController().navigate(loginAction)
+            }
+        }
 
         loginButton.setOnClickListener {
             hideSoftInput(loginButton)
