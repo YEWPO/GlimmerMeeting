@@ -33,8 +33,6 @@ import androidx.compose.ui.unit.sp
 import com.kizitonwose.calendar.compose.WeekCalendar
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
 import com.kizitonwose.calendar.core.atStartOfMonth
-import com.kizitonwose.calendar.core.daysOfWeek
-import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -57,6 +55,8 @@ class CalendarFragment : Fragment() {
     }
 }
 
+private val monthFormat = DateTimeFormatter.ofPattern("yyyy年MM月")
+
 @Preview
 @Composable
 fun MainScreen() {
@@ -67,13 +67,10 @@ fun MainScreen() {
         YearMonth.now()
     }
     val startDate = remember {
-        currentMonth.atStartOfMonth()
+        currentMonth.minusMonths(120).atStartOfMonth()
     }
     val endDate = remember {
-        currentMonth.atEndOfMonth()
-    }
-    val dayOfWeek = remember {
-        daysOfWeek()
+        currentMonth.plusMonths(120).atEndOfMonth()
     }
     var selection by remember {
         mutableStateOf(currentDate)
@@ -86,7 +83,20 @@ fun MainScreen() {
     )
     
     Column {
-        Text(text = YearMonth.now().toString())
+        Text(
+            text = monthFormat.format(selection),
+            color = Color.Black,
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color(0xFF0099FF))
+                .padding(
+                    start = 10.dp,
+                    top = 10.dp,
+                    bottom = 10.dp
+                )
+        )
         WeekCalendar(
             modifier = Modifier
                 .background(color = Color.White),
@@ -114,20 +124,26 @@ private fun Day(date: LocalDate, isSelected: Boolean, onClick: (LocalDate) -> Un
         contentAlignment = Alignment.Center,
     ) {
         Column(
-            modifier = Modifier.padding(vertical = 10.dp),
+            modifier = Modifier.padding(vertical = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(6.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             Text(
                 text = date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
-                fontSize = 12.sp,
+                fontSize = 16.sp,
                 color = Color.Black,
                 fontWeight = FontWeight.Light,
             )
             Text(
                 text = dateFormatter.format(date),
-                fontSize = 14.sp,
-                color = if (isSelected) Color(0xff0099ff) else Color.Black,
+                fontSize = 20.sp,
+                color = if (isSelected) {
+                    if (date == LocalDate.now()) colorResource(id = R.color.glimmer) else Color.DarkGray
+                } else if (date < LocalDate.now())
+                    Color.Gray
+                else if (date == LocalDate.now()) colorResource(
+                    id = R.color.glimmer
+                ) else Color.Black,
                 fontWeight = FontWeight.Bold,
             )
         }
@@ -136,9 +152,18 @@ private fun Day(date: LocalDate, isSelected: Boolean, onClick: (LocalDate) -> Un
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(5.dp)
-                    .background(Color(0xff0099ff))
+                    .background(if (date == LocalDate.now()) colorResource(id = R.color.glimmer) else Color.DarkGray)
                     .align(Alignment.BottomCenter),
             )
         }
+    }
+}
+
+@Composable
+private fun RoomSchedule(roomName: String) {
+    Column(
+        modifier = Modifier.padding(vertical = 6.dp)
+    ) {
+        Text(text = roomName)
     }
 }
