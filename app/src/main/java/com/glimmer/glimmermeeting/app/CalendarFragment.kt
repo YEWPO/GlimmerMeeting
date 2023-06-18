@@ -25,9 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.fragment.app.Fragment
 import com.glimmer.glimmermeeting.R
 import androidx.compose.ui.platform.ComposeView
@@ -171,7 +169,9 @@ private fun Day(date: LocalDate, isSelected: Boolean, onClick: (LocalDate) -> Un
 }
 
 @Composable
-private fun RoomSchedule(roomName: String, roomSize: Int) {
+private fun RoomSchedule(
+    roomName: String,
+    roomSize: Int) {
     Box(modifier = Modifier
         .fillMaxWidth()
         .wrapContentHeight()
@@ -186,7 +186,7 @@ private fun RoomSchedule(roomName: String, roomSize: Int) {
         Column(
             modifier = Modifier
                 .padding(vertical = 10.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+            verticalArrangement = Arrangement.spacedBy(9.dp)
         ) {
             Text(
                 text = roomName,
@@ -200,12 +200,58 @@ private fun RoomSchedule(roomName: String, roomSize: Int) {
                     painter = painterResource(id = R.drawable.room_people),
                     contentDescription = null,
                     modifier = Modifier
-                        .size(20.dp)
+                        .size(16.dp)
                 )
                 Text(
                     text = "$roomSize 人",
-                    fontSize = 15.sp
+                    fontSize = 14.sp
                 )
+            }
+            TimerBar(ranges = listOf(1 to 2))
+        }
+    }
+}
+
+@Composable
+private fun TimerBar(
+    ranges: List<Pair<Int, Int>>
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            repeat(8) {
+                Box(
+                    modifier = Modifier
+                        .size(
+                            width = 36.dp,
+                            height = 46.dp
+                        )
+                ) {
+                    Column() {
+                        Row {
+                            repeat(4) {
+                                Box(
+                                    modifier = Modifier
+                                        .background(Color.Gray)
+                                        .size(
+                                            width = 9.dp,
+                                            height = 30.dp
+                                        )
+                                )
+                            }
+                        }
+                        Text(
+                            text = (it * 2 + 8).toString(),
+                            fontSize = 12.sp
+                        )
+                    }
+                }
             }
         }
     }
