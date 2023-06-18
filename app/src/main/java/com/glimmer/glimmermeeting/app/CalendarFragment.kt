@@ -4,14 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,11 +25,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.fragment.app.Fragment
 import com.glimmer.glimmermeeting.R
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -99,7 +106,10 @@ fun MainScreen() {
         )
         WeekCalendar(
             modifier = Modifier
-                .background(color = Color.White),
+                .background(color = Color.White)
+                .padding(
+                    bottom = 18.dp
+                ),
             state = state,
             dayContent = { day ->
                 Day(date = day.date, isSelected = selection == day.date) { clicked ->
@@ -109,6 +119,7 @@ fun MainScreen() {
                 }
             }
         )
+        RoomSchedule(roomName = "testRoom", roomSize = 30)
     }
 }
 
@@ -121,12 +132,12 @@ private fun Day(date: LocalDate, isSelected: Boolean, onClick: (LocalDate) -> Un
             .fillMaxWidth()
             .wrapContentHeight()
             .clickable { onClick(date) },
-        contentAlignment = Alignment.Center,
+        contentAlignment = Alignment.Center
     ) {
         Column(
-            modifier = Modifier.padding(vertical = 12.dp),
+            modifier = Modifier.padding(vertical = 15.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(10.dp),
+            verticalArrangement = Arrangement.spacedBy(13.dp)
         ) {
             Text(
                 text = date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
@@ -153,17 +164,49 @@ private fun Day(date: LocalDate, isSelected: Boolean, onClick: (LocalDate) -> Un
                     .fillMaxWidth()
                     .height(5.dp)
                     .background(if (date == LocalDate.now()) colorResource(id = R.color.glimmer) else Color.DarkGray)
-                    .align(Alignment.BottomCenter),
+                    .align(Alignment.BottomCenter)
             )
         }
     }
 }
 
 @Composable
-private fun RoomSchedule(roomName: String) {
-    Column(
-        modifier = Modifier.padding(vertical = 6.dp)
+private fun RoomSchedule(roomName: String, roomSize: Int) {
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .wrapContentHeight()
+        .border(
+            width = 1.dp,
+            color = colorResource(id = R.color.glimmer)
+        )
+        .padding(
+            horizontal = 20.dp
+        )
     ) {
-        Text(text = roomName)
+        Column(
+            modifier = Modifier
+                .padding(vertical = 10.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text(
+                text = roomName,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(5.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.room_people),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(20.dp)
+                )
+                Text(
+                    text = "$roomSize 人",
+                    fontSize = 15.sp
+                )
+            }
+        }
     }
 }
