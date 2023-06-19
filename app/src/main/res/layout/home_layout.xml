@@ -15,6 +15,7 @@
         android:clickable="true"
         android:contentDescription="addMeeting"
         android:src="@drawable/add_icon"
+        app:maxImageSize="60sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
