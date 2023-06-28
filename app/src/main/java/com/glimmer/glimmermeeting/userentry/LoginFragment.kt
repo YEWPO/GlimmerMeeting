@@ -58,8 +58,6 @@ class LoginFragment : Fragment(R.layout.login_layout) {
 
     private val loginSuccessHandler: Handler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
-            super.handleMessage(msg)
-
             val loginJsonAdapter = MainActivity().moshi.adapter(LoginJson::class.java)
 
             val loginJson = msg.data.getString("json")?.let { loginJsonAdapter.fromJson(it) }
