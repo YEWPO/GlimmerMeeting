@@ -14,12 +14,9 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import com.glimmer.glimmermeeting.MainActivity
 import com.glimmer.glimmermeeting.R
-import com.glimmer.glimmermeeting.app.AppFragment
 import com.squareup.moshi.JsonClass
 import okhttp3.Call
 import okhttp3.Callback

@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:textColor="@color/black"
         android:text="周日"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,13 +38,14 @@
         android:text="roomTest"
         android:textColor="@color/glimmer"
         android:textSize="14sp"
-        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintStart_toEndOf="@+id/meetingRoomIcon"
         app:layout_constraintTop_toBottomOf="@+id/weekdayName" />
 
     <TextView
         android:id="@+id/meetingTimeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/black"
         android:text="19:00-20:00"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -57,6 +59,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
+        android:textColor="@color/black"
         android:text="会议主题"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -76,7 +79,7 @@
         app:srcCompat="@drawable/ic_meeting_date" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/meetingRoomIcon"
         android:layout_width="23dp"
         android:layout_height="20dp"
         android:layout_marginStart="20dp"
@@ -84,4 +87,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/weekdayName"
         app:srcCompat="@drawable/ic_meeting_room" />
+
+    <ImageView
+        android:id="@+id/trashIcon"
+        android:layout_width="21dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_trash" />
 </androidx.constraintlayout.widget.ConstraintLayout>
