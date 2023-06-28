@@ -14,10 +14,10 @@
         android:layout_marginBottom="40dp"
         android:clickable="true"
         android:contentDescription="addMeeting"
-        android:src="@drawable/add_icon"
-        app:maxImageSize="60sp"
+        android:src="@drawable/ic_add"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="60sp" />
 
     <TextView
         android:id="@+id/myMeetingHeader"
@@ -43,4 +43,27 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/myMeetingHeader" />
+
+    <TextView
+        android:id="@+id/emptyInfoTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="列表空空如也"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <ImageView
+        android:id="@+id/emptyBoxImage"
+        android:layout_width="99dp"
+        android:layout_height="85dp"
+        android:src="@drawable/ic_empty_box"
+        app:layout_constraintBottom_toTopOf="@+id/emptyInfoTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

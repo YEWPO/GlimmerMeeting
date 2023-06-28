@@ -8,8 +8,10 @@ import android.os.Message
 import android.os.Message.obtain
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.ListView
 import android.widget.SimpleAdapter
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.glimmer.glimmermeeting.MainActivity
@@ -33,6 +35,8 @@ class HomeFragment : Fragment(R.layout.home_layout) {
     private lateinit var myMeetingListView: ListView
     private lateinit var addActionButton: FloatingActionButton
     private lateinit var userToken: String
+    private lateinit var emptyInfoText: TextView
+    private lateinit var emptyBoxView: ImageView
 
     @JsonClass(generateAdapter = true)
     data class MeetingInfo(
@@ -73,7 +77,6 @@ class HomeFragment : Fragment(R.layout.home_layout) {
             Log.i("meetingjson", msg.data.getString("json")!!)
 
             if (msg.data.getBoolean("state")) {
-                Toast.makeText(context, "获取用户会议列表信息成功", Toast.LENGTH_SHORT).show()
                 val meetingListJson = msg.data.getString("json")?.let { meetingListJsonAdapter.fromJson(it) }
 
                 var meetingList = mutableListOf<Map<String, String>>()
@@ -84,13 +87,15 @@ class HomeFragment : Fragment(R.layout.home_layout) {
                         meetingList.add(mapOf(
                             "weekdayName" to  SimpleDateFormat("yyyy-MM-dd").parse(aMeeting.day).toInstant().atZone(
                                 ZoneId.systemDefault()).toLocalDate().dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault()),
-                            "date" to SimpleDateFormat("MM月dd日").format(SimpleDateFormat("yyyy-MM-dd").parse(aMeeting.day)),
+                            "date" to SimpleDateFormat("yyyy年MM月dd日").format(SimpleDateFormat("yyyy-MM-dd").parse(aMeeting.day)),
                             "roomInfo" to aMeeting.roomlocation,
                             "meetingTitle" to aMeeting.theme,
                             "meetingTime" to "${aMeeting.duration.beginhour}:$beginMinute--" +
                                     "${aMeeting.duration.endhour}:$endMinute"
                         ))
                     }
+                    emptyInfoText.visibility = View.INVISIBLE
+                    emptyBoxView.visibility = View.INVISIBLE
                     setMeetingList(meetingList)
                 }
             } else {
@@ -131,6 +136,12 @@ class HomeFragment : Fragment(R.layout.home_layout) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         myMeetingListView = view.findViewById(R.id.meetingList)
         addActionButton = view.findViewById(R.id.addActionButton)
+        emptyInfoText = view.findViewById(R.id.emptyInfoTextView)
+        emptyBoxView = view.findViewById(R.id.emptyBoxImage)
+
+        emptyInfoText.visibility = View.VISIBLE
+        emptyBoxView.visibility = View.VISIBLE
+
         val sharedPreferences = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         userToken = sharedPreferences.getString("loginToken", "null") ?: "null"
 

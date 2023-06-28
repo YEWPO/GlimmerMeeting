@@ -268,7 +268,7 @@ private fun TimerBar(
                             modifier = Modifier
                                 .border(
                                     width = 1.dp,
-                                    color = colorResource(id = R.color.glimmer)
+                                    color = Color.DarkGray
                                 )
                         ) {
                             Row {
