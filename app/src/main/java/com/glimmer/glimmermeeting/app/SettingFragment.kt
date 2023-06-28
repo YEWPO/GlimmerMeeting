@@ -14,6 +14,16 @@ class SettingFragment : Fragment(R.layout.setting_layout) {
 
     private lateinit var settingUserAccount: TextView
 
+    fun logout() {
+        val sharedPreferences = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+        with(sharedPreferences.edit()) {
+            clear()
+            apply()
+        }
+
+        activity?.supportFragmentManager?.findFragmentById(R.id.main_fragment_container)!!.findNavController().navigate(R.id.userentryFragment)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         logoutButton = view.findViewById(R.id.logoutButton)
         settingUserAccount = view.findViewById(R.id.settingUserAccount)
@@ -23,12 +33,7 @@ class SettingFragment : Fragment(R.layout.setting_layout) {
         settingUserAccount.text = sharedPreferences.getString("loginToken", "null")
 
         logoutButton.setOnClickListener {
-            with(sharedPreferences.edit()) {
-                clear()
-                apply()
-            }
-
-            activity?.supportFragmentManager?.findFragmentById(R.id.main_fragment_container)!!.findNavController().navigate(R.id.userentryFragment)
+            logout()
         }
     }
 }
