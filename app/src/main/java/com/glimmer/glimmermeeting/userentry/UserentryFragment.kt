@@ -45,8 +45,7 @@ class UserentryFragment : Fragment(R.layout.userentry_layout) {
             val loginDiff = (Date().time - loginDate!!.time) / (1000 * 60 * 60 * 24)
 
             if (loginDiff <= 30) {
-                val loginAction = UserentryFragmentDirections.userentryFragmentToAppFragment(loginToken)
-                Navigation.findNavController(view).navigate(loginAction)
+                Navigation.findNavController(view).navigate(R.id.appFragment)
             }
         }
     }

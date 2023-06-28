@@ -72,8 +72,7 @@ class LoginFragment : Fragment(R.layout.login_layout) {
                     apply()
                 }
 
-                val loginAction = UserentryFragmentDirections.userentryFragmentToAppFragment(loginJson.token!!)
-                Navigation.findNavController(requireView()).navigate(loginAction)
+                Navigation.findNavController(requireView()).navigate(R.id.appFragment)
             }
         }
     }

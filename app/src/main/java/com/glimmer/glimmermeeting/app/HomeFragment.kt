@@ -14,6 +14,7 @@ import android.widget.SimpleAdapter
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.glimmer.glimmermeeting.MainActivity
 import com.glimmer.glimmermeeting.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -137,6 +138,12 @@ class HomeFragment : Fragment(R.layout.home_layout) {
         addActionButton = view.findViewById(R.id.addActionButton)
         emptyInfoText = view.findViewById(R.id.emptyInfoTextView)
         emptyBoxView = view.findViewById(R.id.emptyBoxImage)
+
+        addActionButton.setOnClickListener {
+            activity?.supportFragmentManager?.findFragmentById(R.id.main_fragment_container)
+                ?.findNavController()
+                ?.navigate(R.id.addMeetingFragment)
+        }
 
         emptyInfoText.visibility = View.VISIBLE
         emptyBoxView.visibility = View.VISIBLE

@@ -10,9 +10,6 @@
         android:name="com.glimmer.glimmermeeting.userentry.UserentryFragment"
         android:label="UserentryFragment"
         tools:layout="@layout/userentry_layout" >
-        <action
-            android:id="@+id/userentryFragment_to_appFragment"
-            app:destination="@id/appFragment" />
     </fragment>
 
     <fragment
@@ -20,9 +17,11 @@
         android:name="com.glimmer.glimmermeeting.app.AppFragment"
         android:label="app_layout"
         tools:layout="@layout/app_layout">
-
-        <argument
-            android:name="token"
-            app:argType="string" />
     </fragment>
+
+    <fragment
+        android:id="@+id/addMeetingFragment"
+        android:name="com.glimmer.glimmermeeting.app.AddMeetingFragment"
+        android:label="add_meeting_layout"
+        tools:layout="@layout/add_meeting_layout" />
 </navigation>
