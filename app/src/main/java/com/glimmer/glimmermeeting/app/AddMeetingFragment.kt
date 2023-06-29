@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -36,13 +35,15 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RangeSlider
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,7 +51,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusTarget
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalConfiguration
@@ -72,8 +72,6 @@ import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
 import java.time.LocalDate
-import java.time.format.TextStyle
-import java.util.stream.IntStream.range
 
 class AddMeetingFragment : Fragment() {
 
@@ -182,10 +180,10 @@ fun AddMeetingScreen(
     }
 
     var startTime by remember {
-        mutableIntStateOf(0)
+        mutableFloatStateOf(0f)
     }
     var endTime by remember {
-        mutableIntStateOf(0)
+        mutableFloatStateOf(0f)
     }
 
     Scaffold(
@@ -256,16 +254,14 @@ fun AddMeetingScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimeSelection(
-    onStartTimeChanged: (Int) -> Unit,
-    onEndTimeChanged:(Int) -> Unit
+    onStartTimeChanged: (Float) -> Unit,
+    onEndTimeChanged:(Float) -> Unit
 ) {
-    var startTime by remember {
-        mutableIntStateOf(0)
-    }
-    var endTime by remember {
-        mutableIntStateOf(0)
+    var ranges by remember {
+        mutableStateOf(480f..1440f)
     }
 
     Box(
@@ -290,6 +286,38 @@ fun TimeSelection(
                 Text(
                     text = "时间",
                     fontSize = 22.sp
+                )
+            }
+            RangeSlider(
+                value = ranges,
+                valueRange = 480f..1440f,
+                onValueChange = {
+                    ranges = it
+                    onStartTimeChanged(ranges.start)
+                    onEndTimeChanged(ranges.endInclusive)
+                },
+                steps = 959,
+                colors = SliderDefaults.colors(
+                    thumbColor = colorResource(id = R.color.glimmer),
+                    inactiveTrackColor = Color.Transparent,
+                    activeTrackColor = colorResource(id = R.color.glimmer)
+                )
+            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(50.dp)
+            ) {
+                val startHour = ranges.start.toInt() / 60
+                val startMinute = ranges.start.toInt() - startHour * 60
+                val endHour = ranges.endInclusive.toInt() / 60
+                val endMinute = ranges.endInclusive.toInt() - endHour * 60
+
+                Text(
+                    text = "开始时间: $startHour:" + "%02d".format(startMinute),
+                    fontSize = 20.sp
+                )
+                Text(
+                    text = "结束时间: $endHour:" + "%02d".format(endMinute),
+                    fontSize = 20.sp
                 )
             }
         }
