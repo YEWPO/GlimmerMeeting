@@ -12,7 +12,6 @@ import android.widget.ImageView
 import android.widget.ListView
 import android.widget.SimpleAdapter
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.glimmer.glimmermeeting.MainActivity
@@ -99,8 +98,7 @@ class HomeFragment : Fragment(R.layout.home_layout) {
                     setMeetingList(meetingList)
                 }
             } else {
-                Toast.makeText(context, "请重新登录", Toast.LENGTH_SHORT).show()
-                SettingFragment().logout()
+                SettingFragment().logout(true)
             }
         }
     }
@@ -116,7 +114,7 @@ class HomeFragment : Fragment(R.layout.home_layout) {
 
         MainActivity().okHttpClient.newCall(getMeetingListRequest).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                Log.e("Login", e.printStackTrace().toString())
+                Log.e("GetMeetingList", e.printStackTrace().toString())
             }
 
             override fun onResponse(call: Call, response: Response) {
