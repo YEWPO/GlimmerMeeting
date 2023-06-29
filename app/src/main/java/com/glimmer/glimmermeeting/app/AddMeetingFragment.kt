@@ -8,9 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,9 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.glimmer.glimmermeeting.R
 
 class AddMeetingFragment : Fragment() {
@@ -37,7 +34,10 @@ class AddMeetingFragment : Fragment() {
         return inflater.inflate(R.layout.add_meeting_layout, container, false).apply {
             findViewById<ComposeView>(R.id.addMeetingComposeView).apply {
                 setContent {
-                    AddMeetingScreen()
+                    AddMeetingScreen(onNavigate = {
+                        activity?.supportFragmentManager?.findFragmentById(R.id.main_fragment_container)
+                            ?.findNavController()?.navigate(it)
+                    })
                 }
             }
         }
@@ -46,24 +46,28 @@ class AddMeetingFragment : Fragment() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddMeetingScreen() {
+fun AddMeetingScreen(onNavigate: (Int) -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
                         text = "预定会议",
-                        color = colorResource(id = R.color.glimmer),
+                        color = Color.Black,
                         fontSize = 24.sp
                     )
                 },
                 navigationIcon = {
                     IconButton(
                         onClick = {
-
+                            onNavigate(R.id.appFragment)
                         }
                     ) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = null)
+                        Icon(
+                            Icons.Filled.ArrowBack,
+                            contentDescription = null,
+                            tint = colorResource(id = R.color.glimmer)
+                        )
                     }
                 }
             )
