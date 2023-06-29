@@ -28,6 +28,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -71,6 +73,7 @@ import okhttp3.Callback
 import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 
 class AddMeetingFragment : Fragment() {
@@ -248,6 +251,55 @@ fun AddMeetingScreen(
                     onEndTimeChanged = {time ->
                         endTime = time
                     }
+                )
+                BookButton(
+                    meetingRoom = roomSelection,
+                    meetingTitle = meetingTitleInput,
+                    meetingDate = "$dateYearSelection-" + "%02d".format(dateMonthSelection) + "-" + "%02d".format(dateYearSelection),
+                    meetingTime = HomeFragment.DurationData(
+                        beginhour = startTime.toInt() / 60,
+                        beginminute = startTime.toInt() - startTime.toInt() / 60,
+                        endhour = endTime.toInt() / 60,
+                        endminute = endTime.toInt() - endTime.toInt() / 60
+                    ),
+                    onNavigate = onNavigate
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun BookButton(
+    meetingRoom: MeetingRoomInfo,
+    meetingTitle: String,
+    meetingDate: String,
+    meetingTime: HomeFragment.DurationData,
+    onNavigate: (Int) -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                vertical = 5.dp
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Button(
+                onClick = {
+
+                },
+                colors = ButtonDefaults.buttonColors(
+                    colorResource(id = R.color.light_grey)
+                )
+            ) {
+                Text(
+                    text = "预定",
+                    fontSize = 20.sp,
+                    color = colorResource(id = R.color.glimmer)
                 )
             }
         }
