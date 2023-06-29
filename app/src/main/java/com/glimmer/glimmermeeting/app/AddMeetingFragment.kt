@@ -18,10 +18,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -31,8 +33,10 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -166,6 +170,10 @@ fun AddMeetingScreen(
         mutableIntStateOf(LocalDate.now().dayOfMonth)
     }
 
+    var meetingTitleInput by remember {
+        mutableStateOf("我的会议")
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -207,6 +215,9 @@ fun AddMeetingScreen(
                     },
                     meetingRooms = meetingRoomList
                 )
+                MeetTitleInput(onMeetingTitleChanged = {title ->
+                    meetingTitleInput = title
+                })
                 DateSelect(
                     onDateYearSelectionChanged = {year ->
                         dateYearSelection = year
@@ -219,6 +230,52 @@ fun AddMeetingScreen(
                     }
                 )
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MeetTitleInput(
+    onMeetingTitleChanged: (String) -> Unit
+) {
+    var meetingTitle by remember {
+        mutableStateOf("我的会议")
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                horizontal = 15.dp,
+                vertical = 5.dp
+            )
+    ) {
+        Column() {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(5.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_title),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(22.dp)
+                )
+                Text(
+                    text = "会议主题",
+                    fontSize = 22.sp
+                )
+            }
+            OutlinedTextField(
+                value = meetingTitle,
+                onValueChange = {
+                    meetingTitle = it
+                },
+                modifier = Modifier
+                    .width((LocalConfiguration.current.screenWidthDp * 0.9).dp)
+                    .wrapContentHeight(),
+            )
         }
     }
 }
