@@ -174,6 +174,13 @@ fun AddMeetingScreen(
         mutableStateOf("我的会议")
     }
 
+    var startTime by remember {
+        mutableIntStateOf(0)
+    }
+    var endTime by remember {
+        mutableIntStateOf(0)
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -229,6 +236,54 @@ fun AddMeetingScreen(
                         dateDaySelection = day
                     }
                 )
+                TimeSelection(
+                    onStartTimeChanged = {time ->
+                        startTime = time
+                    },
+                    onEndTimeChanged = {time ->
+                        endTime = time
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun TimeSelection(
+    onStartTimeChanged: (Int) -> Unit,
+    onEndTimeChanged:(Int) -> Unit
+) {
+    var startTime by remember {
+        mutableIntStateOf(0)
+    }
+    var endTime by remember {
+        mutableIntStateOf(0)
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                horizontal = 15.dp,
+                vertical = 5.dp
+            )
+    ) {
+        Column {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(5.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_clock),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(22.dp)
+                )
+                Text(
+                    text = "时间",
+                    fontSize = 22.sp
+                )
             }
         }
     }
@@ -271,6 +326,7 @@ fun MeetTitleInput(
                 value = meetingTitle,
                 onValueChange = {
                     meetingTitle = it
+                    onMeetingTitleChanged(meetingTitle)
                 },
                 modifier = Modifier
                     .width((LocalConfiguration.current.screenWidthDp * 0.9).dp)
