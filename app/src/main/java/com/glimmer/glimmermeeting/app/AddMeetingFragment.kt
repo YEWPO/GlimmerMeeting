@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -36,6 +37,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -59,6 +61,8 @@ import okhttp3.Callback
 import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
+import java.time.LocalDate
+import java.util.stream.IntStream.range
 
 class AddMeetingFragment : Fragment() {
 
@@ -152,6 +156,16 @@ fun AddMeetingScreen(
         })
     }
 
+    var dateYearSelection by remember {
+        mutableIntStateOf(LocalDate.now().year)
+    }
+    var dateMonthSelection by remember {
+        mutableIntStateOf(LocalDate.now().month.value)
+    }
+    var dateDaySelection by remember {
+        mutableIntStateOf(LocalDate.now().dayOfMonth)
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -183,12 +197,28 @@ fun AddMeetingScreen(
                 .padding(paddingValues)
         ) {
             Divider()
-            MeetingRoomSelect(
-                onRoomSelectionChanged = {room ->
-                    roomSelection = room
-                },
-                meetingRooms = meetingRoomList
-            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                MeetingRoomSelect(
+                    onRoomSelectionChanged = {room ->
+                        roomSelection = room
+                    },
+                    meetingRooms = meetingRoomList
+                )
+                DateSelect(
+                    onDateYearSelectionChanged = {year ->
+                        dateYearSelection = year
+                    },
+                    onDateMonthSelectionChanged = {month ->
+                        dateMonthSelection = month
+                    },
+                    onDateDaySelectionChanged = {day ->
+                        dateDaySelection = day
+                    }
+                )
+            }
         }
     }
 }
@@ -217,7 +247,7 @@ fun MeetingRoomSelect(
             .fillMaxWidth()
             .padding(
                 horizontal = 15.dp,
-                vertical = 10.dp
+                vertical = 5.dp
             )
     ) {
         Column() {
@@ -229,11 +259,11 @@ fun MeetingRoomSelect(
                     painter = painterResource(id = R.drawable.ic_meeting),
                     contentDescription = null,
                     modifier = Modifier
-                        .size(18.dp)
+                        .size(22.dp)
                 )
                 Text(
                     text = "会议室",
-                    fontSize = 18.sp
+                    fontSize = 22.sp
                 )
             }
             Row(
@@ -247,11 +277,11 @@ fun MeetingRoomSelect(
                             width = 1.dp,
                             color = colorResource(id = R.color.glimmer)
                         ),
-                    contentAlignment = Alignment.Center,
+                    contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = selectedItem.name,
-                        fontSize = 16.sp
+                        fontSize = 20.sp
                     )
                 }
                 IconButton(
@@ -284,6 +314,245 @@ fun MeetingRoomSelect(
                             onRoomSelectionChanged(selectedItem)
                         }
                     )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun DateSelect(
+    onDateYearSelectionChanged: (Int) -> Unit,
+    onDateMonthSelectionChanged: (Int) -> Unit,
+    onDateDaySelectionChanged: (Int) -> Unit
+) {
+    var yearSelection by remember {
+        mutableIntStateOf(LocalDate.now().year)
+    }
+    var monthSelection by remember {
+        mutableIntStateOf(LocalDate.now().month.value)
+    }
+    var daySelection by remember {
+        mutableIntStateOf(LocalDate.now().dayOfMonth)
+    }
+    var yearExpanded by remember {
+        mutableStateOf(false)
+    }
+    var monthExpanded by remember {
+        mutableStateOf(false)
+    }
+    var dayExpanded by remember {
+        mutableStateOf(false)
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                horizontal = 15.dp,
+                vertical = 5.dp
+            )
+    ) {
+        Column {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(5.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_date),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(22.dp)
+                )
+                Text(
+                    text = "日期",
+                    fontSize = 22.sp
+                )
+            }
+            Row {
+                Box(
+                    modifier = Modifier
+                        .width((LocalConfiguration.current.screenWidthDp * 0.3).dp)
+                ) {
+                    Column {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .background(colorResource(id = R.color.light_grey))
+                                    .width((LocalConfiguration.current.screenWidthDp * 0.2).dp)
+                                    .border(
+                                        width = 1.dp,
+                                        color = colorResource(id = R.color.glimmer)
+                                    ),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = yearSelection.toString(),
+                                    fontSize = 20.sp
+                                )
+                            }
+                            IconButton(
+                                onClick = {
+                                    yearExpanded = true
+                                }
+                            ) {
+                                Icon(
+                                    Icons.Filled.ArrowDropDown,
+                                    contentDescription = null
+                                )
+                            }
+                        }
+                        DropdownMenu(
+                            modifier = Modifier
+                                .width((LocalConfiguration.current.screenWidthDp * 0.3).dp)
+                                .heightIn(50.dp, 300.dp),
+                            expanded = yearExpanded,
+                            onDismissRequest = {
+                                yearExpanded = false
+                            }
+                        ) {
+                            (2020..2100).forEach { year ->
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(text = year.toString())
+                                    },
+                                    onClick = {
+                                        yearSelection = year
+                                        monthSelection = 1
+                                        daySelection = 1
+                                        yearExpanded = false
+                                        onDateYearSelectionChanged(yearSelection)
+                                        onDateMonthSelectionChanged(monthSelection)
+                                        onDateDaySelectionChanged(daySelection)
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
+                Box(
+                    modifier = Modifier
+                        .width((LocalConfiguration.current.screenWidthDp * 0.3).dp)
+                ) {
+                    Column {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .background(colorResource(id = R.color.light_grey))
+                                    .width((LocalConfiguration.current.screenWidthDp * 0.2).dp)
+                                    .border(
+                                        width = 1.dp,
+                                        color = colorResource(id = R.color.glimmer)
+                                    ),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = monthSelection.toString(),
+                                    fontSize = 20.sp
+                                )
+                            }
+                            IconButton(
+                                onClick = {
+                                    monthExpanded = true
+                                }
+                            ) {
+                                Icon(
+                                    Icons.Filled.ArrowDropDown,
+                                    contentDescription = null
+                                )
+                            }
+                        }
+                        DropdownMenu(
+                            modifier = Modifier
+                                .width((LocalConfiguration.current.screenWidthDp * 0.3).dp)
+                                .heightIn(50.dp, 300.dp),
+                            expanded = monthExpanded,
+                            onDismissRequest = {
+                                monthExpanded = false
+                            }
+                        ) {
+                            (1..12).forEach { month ->
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(text = month.toString())
+                                    },
+                                    onClick = {
+                                        monthSelection = month
+                                        daySelection = 1
+                                        monthExpanded = false
+                                        onDateYearSelectionChanged(monthSelection)
+                                        onDateDaySelectionChanged(daySelection)
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
+                Box(
+                    modifier = Modifier
+                        .width((LocalConfiguration.current.screenWidthDp * 0.3).dp)
+                ) {
+                    Column {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .background(colorResource(id = R.color.light_grey))
+                                    .width((LocalConfiguration.current.screenWidthDp * 0.2).dp)
+                                    .border(
+                                        width = 1.dp,
+                                        color = colorResource(id = R.color.glimmer)
+                                    ),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = daySelection.toString(),
+                                    fontSize = 20.sp
+                                )
+                            }
+                            IconButton(
+                                onClick = {
+                                    dayExpanded = true
+                                }
+                            ) {
+                                Icon(
+                                    Icons.Filled.ArrowDropDown,
+                                    contentDescription = null
+                                )
+                            }
+                        }
+                        DropdownMenu(
+                            modifier = Modifier
+                                .width((LocalConfiguration.current.screenWidthDp * 0.3).dp)
+                                .heightIn(50.dp, 300.dp),
+                            expanded = dayExpanded,
+                            onDismissRequest = {
+                                dayExpanded = false
+                            }
+                        ) {
+                            when(monthSelection) {
+                                1, 3, 5, 7, 8, 10, 12 -> (1..31)
+                                4, 6, 9, 11 ->(1..30)
+                                2 -> if (yearSelection % 4 == 0 && yearSelection % 400 != 0) (1..29) else (1..28)
+                                else -> (0..0)
+                            }.forEach { day ->
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(text = day.toString())
+                                    },
+                                    onClick = {
+                                        daySelection = day
+                                        dayExpanded = false
+                                        onDateYearSelectionChanged(daySelection)
+                                    }
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
