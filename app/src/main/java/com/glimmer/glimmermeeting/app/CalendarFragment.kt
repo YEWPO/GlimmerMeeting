@@ -93,7 +93,7 @@ fun MainScreen() {
     Column {
         Text(
             text = monthFormat.format(selection),
-            color = Color.Black,
+            color = Color(0xFF75FFD4),
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
