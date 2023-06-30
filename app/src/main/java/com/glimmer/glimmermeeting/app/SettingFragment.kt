@@ -16,10 +16,6 @@ class SettingFragment : Fragment(R.layout.setting_layout) {
     private lateinit var settingUserAccount: TextView
 
     fun logout(flag: Boolean) {
-        if (flag) {
-            Toast.makeText(context, "请重新登录", Toast.LENGTH_SHORT).show()
-        }
-
         val sharedPreferences = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         with(sharedPreferences.edit()) {
             clear()
@@ -27,6 +23,10 @@ class SettingFragment : Fragment(R.layout.setting_layout) {
         }
 
         activity?.supportFragmentManager?.findFragmentById(R.id.main_fragment_container)!!.findNavController().navigate(R.id.userentryFragment)
+
+        if (flag) {
+            Toast.makeText(context, "请重新登录", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

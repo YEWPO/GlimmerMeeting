@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -66,14 +67,22 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.glimmer.glimmermeeting.MainActivity
 import com.glimmer.glimmermeeting.R
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Types
+import com.squareup.moshi.adapter
 import okhttp3.Call
 import okhttp3.Callback
+import okhttp3.FormBody
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import java.io.IOException
 import java.text.SimpleDateFormat
+import java.time.Duration
 import java.time.LocalDate
 
 class AddMeetingFragment : Fragment() {
@@ -91,7 +100,8 @@ class AddMeetingFragment : Fragment() {
                             activity?.supportFragmentManager?.findFragmentById(R.id.main_fragment_container)
                             ?.findNavController()?.navigate(it)
                         },
-                        token = activity?.getPreferences(Context.MODE_PRIVATE)?.getString("loginToken", null)?:"null"
+                        token = activity?.getPreferences(Context.MODE_PRIVATE)?.getString("loginToken", null)?:"null",
+                        context = context
                     )
                 }
             }
@@ -113,7 +123,8 @@ data class MeetingRoomInfo(
 @Composable
 fun AddMeetingScreen(
     onNavigate: (Int) -> Unit,
-    token: String
+    token: String,
+    context: Context
 ) {
     var roomSelection by remember {
         mutableStateOf(MeetingRoomInfo(
@@ -255,19 +266,31 @@ fun AddMeetingScreen(
                 BookButton(
                     meetingRoom = roomSelection,
                     meetingTitle = meetingTitleInput,
-                    meetingDate = "$dateYearSelection-" + "%02d".format(dateMonthSelection) + "-" + "%02d".format(dateYearSelection),
+                    meetingDate = "$dateYearSelection-" + "%02d".format(dateMonthSelection) + "-" + "%02d".format(dateDaySelection),
                     meetingTime = HomeFragment.DurationData(
                         beginhour = startTime.toInt() / 60,
-                        beginminute = startTime.toInt() - startTime.toInt() / 60,
+                        beginminute = startTime.toInt() - startTime.toInt() / 60 * 60,
                         endhour = endTime.toInt() / 60,
-                        endminute = endTime.toInt() - endTime.toInt() / 60
+                        endminute = endTime.toInt() - endTime.toInt() / 60 * 60
                     ),
-                    onNavigate = onNavigate
+                    onNavigate = onNavigate,
+                    token = token,
+                    context = context
                 )
             }
         }
     }
 }
+
+@JsonClass(generateAdapter = true)
+data class BookInfo(
+    val duration: HomeFragment.DurationData,
+    val day: String,
+    val theme: String,
+    val roomid: Int,
+    val attendees: List<Int>,
+    val token: String
+)
 
 @Composable
 fun BookButton(
@@ -275,8 +298,22 @@ fun BookButton(
     meetingTitle: String,
     meetingDate: String,
     meetingTime: HomeFragment.DurationData,
-    onNavigate: (Int) -> Unit
+    onNavigate: (Int) -> Unit,
+    token: String,
+    context: Context
 ) {
+    val bookHandler: Handler = object : Handler(Looper.getMainLooper()) {
+        override fun handleMessage(msg: Message) {
+            if (msg.data.getBoolean("state")) {
+                onNavigate(R.id.appFragment)
+                Toast.makeText(context, "预定成功", Toast.LENGTH_SHORT).show()
+            } else {
+                Log.i("bookmeetinghandlerjson", msg.data.getString("json", null))
+                Toast.makeText(context, "预定失败", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -290,7 +327,40 @@ fun BookButton(
         ) {
             Button(
                 onClick = {
+                    val bookInfoAdapter = MainActivity().moshi.adapter(BookInfo::class.java)
+                    val requestJson = bookInfoAdapter.toJson(BookInfo(
+                        duration = meetingTime,
+                        theme = meetingTitle,
+                        day = meetingDate,
+                        token = token,
+                        attendees = listOf(0),
+                        roomid = meetingRoom.id
+                    ))
 
+                    Log.i("json", requestJson)
+
+                    val request = Request.Builder()
+                        .url("http://api.mcyou.cc:2023/book/meeting")
+                        .post(requestJson.toRequestBody("application/json; charset=utf-8".toMediaType()))
+                        .build()
+
+                    MainActivity().okHttpClient.newCall(request).enqueue(object : Callback {
+                        override fun onFailure(call: Call, e: IOException) {
+                            Log.e("BookMeeting", e.printStackTrace().toString())
+                        }
+
+                        override fun onResponse(call: Call, response: Response) {
+                            val responseState = response.isSuccessful
+                            val responseJson = response.body!!.string()
+
+                            val responseMessage = obtain()
+                            val responseBundle = Bundle()
+                            responseBundle.putBoolean("state", responseState)
+                            responseBundle.putString("json", responseJson)
+                            responseMessage.data = responseBundle
+                            bookHandler.sendMessage(responseMessage)
+                        }
+                    })
                 },
                 colors = ButtonDefaults.buttonColors(
                     colorResource(id = R.color.light_grey)
