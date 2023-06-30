@@ -764,7 +764,7 @@ fun DateSelect(
                                         monthSelection = month
                                         daySelection = 1
                                         monthExpanded = false
-                                        onDateYearSelectionChanged(monthSelection)
+                                        onDateMonthSelectionChanged(monthSelection)
                                         onDateDaySelectionChanged(daySelection)
                                     }
                                 )
@@ -828,7 +828,7 @@ fun DateSelect(
                                     onClick = {
                                         daySelection = day
                                         dayExpanded = false
-                                        onDateYearSelectionChanged(daySelection)
+                                        onDateDaySelectionChanged(daySelection)
                                     }
                                 )
                             }
