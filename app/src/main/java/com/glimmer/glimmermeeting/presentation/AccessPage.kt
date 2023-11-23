@@ -6,6 +6,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.glimmer.glimmermeeting.R
+import com.glimmer.glimmermeeting.ui.theme.BlueLight
 import com.glimmer.glimmermeeting.ui.theme.GlimmerMeetingTheme
 
 @Composable
@@ -33,6 +39,7 @@ fun AccessPage() {
             )
     ) {
         AccessPageTitle()
+        AccessPageContent()
     }
 }
 
@@ -49,7 +56,7 @@ fun AccessPageTitle() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(200.dp),
+            .height(180.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
@@ -59,5 +66,19 @@ fun AccessPageTitle() {
             modifier = Modifier
                 .padding(start = 30.dp, top = 50.dp)
         )
+    }
+}
+
+@Composable
+fun AccessPageContent() {
+    Card(
+        modifier = Modifier
+            .fillMaxSize(),
+        shape = RoundedCornerShape(22.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = BlueLight
+        )
+    ) {
+
     }
 }
