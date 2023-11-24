@@ -1,5 +1,6 @@
 package com.glimmer.glimmermeeting.presentation
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +18,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -178,16 +180,19 @@ fun AccessPageInputField() {
 
 @Composable
 fun AccessPageActionField() {
+    var rulesAgree by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
         Button(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(60.dp)
-                .padding(start = 30.dp, end = 30.dp, top = 10.dp),
+                .height(50.dp)
+                .padding(start = 40.dp, end = 40.dp),
             onClick = { },
             shape = RoundedCornerShape(10.dp)
         ) {
@@ -199,8 +204,8 @@ fun AccessPageActionField() {
         Button(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(70.dp)
-                .padding(start = 30.dp, end = 30.dp, top = 20.dp),
+                .height(50.dp)
+                .padding(start = 40.dp, end = 40.dp),
             onClick = {  },
             shape = RoundedCornerShape(10.dp),
             colors = ButtonDefaults.buttonColors(
@@ -211,6 +216,18 @@ fun AccessPageActionField() {
                 text = "新用户激活",
                 fontSize = 17.sp,
                 color = Color.Black
+            )
+        }
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            RadioButton(
+                selected = rulesAgree,
+                onClick = { rulesAgree = !rulesAgree }
+            )
+            Text(
+                text = "同意《用户使用条例》和《隐私政策》",
+                fontSize = 14.sp
             )
         }
     }
