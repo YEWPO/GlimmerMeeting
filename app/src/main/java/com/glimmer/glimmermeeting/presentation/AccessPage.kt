@@ -43,8 +43,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.glimmer.glimmermeeting.R
-import com.glimmer.glimmermeeting.ui.theme.BlueGrey
-import com.glimmer.glimmermeeting.ui.theme.BlueLight
 import com.glimmer.glimmermeeting.ui.theme.GlimmerMeetingTheme
 import com.glimmer.glimmermeeting.ui.theme.PinkLight
 
@@ -98,7 +96,7 @@ fun AccessPageContent() {
             .fillMaxSize(),
         shape = RoundedCornerShape(22.dp),
         colors = CardDefaults.cardColors(
-            containerColor = BlueLight
+            containerColor = Color.White
         )
     ) {
         AccessPageInputField()
@@ -123,7 +121,7 @@ fun AccessPageInputField() {
                 .fillMaxWidth()
                 .padding(start = 30.dp, end = 30.dp, top = 30.dp),
             colors = TextFieldDefaults.textFieldColors(
-                containerColor = BlueGrey
+                containerColor = Color.White
             ),
             value = username,
             onValueChange = { username = it },
@@ -136,7 +134,7 @@ fun AccessPageInputField() {
                 .fillMaxWidth()
                 .padding(start = 30.dp, end = 30.dp, top = 25.dp),
             colors = TextFieldDefaults.textFieldColors(
-                containerColor = BlueGrey
+                containerColor = Color.White
             ),
             value = password,
             onValueChange = { password = it },
