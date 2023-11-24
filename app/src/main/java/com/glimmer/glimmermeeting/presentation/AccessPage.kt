@@ -7,22 +7,38 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.glimmer.glimmermeeting.R
+import com.glimmer.glimmermeeting.ui.theme.BlueGrey
 import com.glimmer.glimmermeeting.ui.theme.BlueLight
 import com.glimmer.glimmermeeting.ui.theme.GlimmerMeetingTheme
 
@@ -34,7 +50,7 @@ fun AccessPage() {
             .paint(
                 painter = painterResource(id = R.drawable.access_background),
                 contentScale = ContentScale.FillWidth,
-                alpha = 0.6f,
+                alpha = 0.5f,
                 alignment = Alignment.TopCenter
             )
     ) {
@@ -56,7 +72,7 @@ fun AccessPageTitle() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(180.dp),
+            .height(170.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
@@ -64,7 +80,7 @@ fun AccessPageTitle() {
             fontSize = 35.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
-                .padding(start = 30.dp, top = 50.dp)
+                .padding(start = 30.dp, top = 30.dp)
         )
     }
 }
@@ -79,6 +95,78 @@ fun AccessPageContent() {
             containerColor = BlueLight
         )
     ) {
+        AccessPageInputField()
+    }
+}
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AccessPageInputField() {
+    var username by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        TextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 30.dp, end = 30.dp, top = 30.dp),
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = BlueGrey
+            ),
+            value = username,
+            onValueChange = { username = it },
+            placeholder = { Text(text = "请输入账户") },
+            label = { Text(text = "账户") },
+            leadingIcon = { Icon(Icons.Outlined.AccountCircle, contentDescription = "account_circle") }
+        )
+        TextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 30.dp, end = 30.dp, top = 25.dp),
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = BlueGrey
+            ),
+            value = password,
+            onValueChange = { password = it },
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            placeholder = { Text(text = "请输入密码") },
+            label = { Text(text = "密码") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            leadingIcon = { Icon(painter = painterResource(id = R.drawable.outline_key), contentDescription = "key") },
+            trailingIcon = {
+                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                    Icon(
+                        painter = painterResource(id =
+                        if (passwordVisible)
+                            R.drawable.outline_visibility
+                        else
+                            R.drawable.outline_visibility_off
+                        ),
+                        contentDescription = "password_visible"
+                    )
+                }
+            }
+        )
+    }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.End
+    ) {
+        TextButton(
+            onClick = {  },
+            modifier = Modifier
+                .padding(end = 30.dp)
+        ) {
+            Text(
+                text = "忘记密码?",
+                textDecoration = TextDecoration.Underline
+            )
+        }
     }
 }
