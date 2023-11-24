@@ -10,6 +10,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -41,6 +44,7 @@ import com.glimmer.glimmermeeting.R
 import com.glimmer.glimmermeeting.ui.theme.BlueGrey
 import com.glimmer.glimmermeeting.ui.theme.BlueLight
 import com.glimmer.glimmermeeting.ui.theme.GlimmerMeetingTheme
+import com.glimmer.glimmermeeting.ui.theme.PinkLight
 
 @Composable
 fun AccessPage() {
@@ -96,6 +100,7 @@ fun AccessPageContent() {
         )
     ) {
         AccessPageInputField()
+        AccessPageActionField()
     }
 }
 
@@ -166,6 +171,46 @@ fun AccessPageInputField() {
             Text(
                 text = "忘记密码?",
                 textDecoration = TextDecoration.Underline
+            )
+        }
+    }
+}
+
+@Composable
+fun AccessPageActionField() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Button(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(60.dp)
+                .padding(start = 30.dp, end = 30.dp, top = 10.dp),
+            onClick = { },
+            shape = RoundedCornerShape(10.dp)
+        ) {
+            Text(
+                text = "登录",
+                fontSize = 17.sp
+            )
+        }
+        Button(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(70.dp)
+                .padding(start = 30.dp, end = 30.dp, top = 20.dp),
+            onClick = {  },
+            shape = RoundedCornerShape(10.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = PinkLight
+            )
+        ) {
+            Text(
+                text = "新用户激活",
+                fontSize = 17.sp,
+                color = Color.Black
             )
         }
     }
