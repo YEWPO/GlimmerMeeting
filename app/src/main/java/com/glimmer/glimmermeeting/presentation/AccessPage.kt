@@ -47,7 +47,9 @@ import com.glimmer.glimmermeeting.ui.theme.GlimmerMeetingTheme
 import com.glimmer.glimmermeeting.ui.theme.PinkLight
 
 @Composable
-fun AccessPage() {
+fun AccessPage(
+    onPageStateChanged: (String) -> Unit
+) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -58,7 +60,8 @@ fun AccessPage() {
                 painter = painterResource(id = R.drawable.access_background),
                 contentScale = ContentScale.FillWidth,
                 alpha = 0.5f,
-                alignment = Alignment.TopCenter
+                alignment =
+                Alignment.TopCenter
             )
     ) {
         AccessPageTitle()
@@ -66,7 +69,8 @@ fun AccessPage() {
             username = username,
             password = password,
             onUsernameChanged = { username = it },
-            onPasswordChanged = { password = it }
+            onPasswordChanged = { password = it },
+            onPageStateChanged = onPageStateChanged
         )
     }
 }
@@ -75,7 +79,9 @@ fun AccessPage() {
 @Composable
 fun AccessPagePreview() {
     GlimmerMeetingTheme {
-        AccessPage()
+        AccessPage(
+            onPageStateChanged = {}
+        )
     }
 }
 
@@ -102,7 +108,8 @@ fun AccessPageContent(
     username: String,
     password: String,
     onUsernameChanged: (String) -> Unit,
-    onPasswordChanged: (String) -> Unit
+    onPasswordChanged: (String) -> Unit,
+    onPageStateChanged: (String) -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -118,7 +125,9 @@ fun AccessPageContent(
             onUsernameChanged = onUsernameChanged,
             onPasswordChanged = onPasswordChanged
         )
-        AccessPageActionField()
+        AccessPageActionField(
+            onPageStateChanged = onPageStateChanged
+        )
     }
 }
 
@@ -198,7 +207,9 @@ fun AccessPageInputField(
 }
 
 @Composable
-fun AccessPageActionField() {
+fun AccessPageActionField(
+    onPageStateChanged: (String) -> Unit
+) {
     var rulesAgree by remember { mutableStateOf(false) }
 
     Column(
@@ -212,7 +223,7 @@ fun AccessPageActionField() {
                 .fillMaxWidth()
                 .height(50.dp)
                 .padding(start = 40.dp, end = 40.dp),
-            onClick = { },
+            onClick = { onPageStateChanged("MainPage") },
             shape = RoundedCornerShape(10.dp)
         ) {
             Text(
@@ -225,7 +236,7 @@ fun AccessPageActionField() {
                 .fillMaxWidth()
                 .height(50.dp)
                 .padding(start = 40.dp, end = 40.dp),
-            onClick = {  },
+            onClick = { },
             shape = RoundedCornerShape(10.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = PinkLight
