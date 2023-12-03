@@ -48,6 +48,9 @@ import com.glimmer.glimmermeeting.ui.theme.PinkLight
 
 @Composable
 fun AccessPage() {
+    var username by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -59,7 +62,12 @@ fun AccessPage() {
             )
     ) {
         AccessPageTitle()
-        AccessPageContent()
+        AccessPageContent(
+            username = username,
+            password = password,
+            onUsernameChanged = { username = it },
+            onPasswordChanged = { password = it }
+        )
     }
 }
 
@@ -90,7 +98,12 @@ fun AccessPageTitle() {
 }
 
 @Composable
-fun AccessPageContent() {
+fun AccessPageContent(
+    username: String,
+    password: String,
+    onUsernameChanged: (String) -> Unit,
+    onPasswordChanged: (String) -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxSize(),
@@ -99,16 +112,24 @@ fun AccessPageContent() {
             containerColor = Color.White
         )
     ) {
-        AccessPageInputField()
+        AccessPageInputField(
+            username = username,
+            password = password,
+            onUsernameChanged = onUsernameChanged,
+            onPasswordChanged = onPasswordChanged
+        )
         AccessPageActionField()
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AccessPageInputField() {
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+fun AccessPageInputField(
+    username: String,
+    password: String,
+    onUsernameChanged: (String) -> Unit,
+    onPasswordChanged: (String) -> Unit
+) {
     var passwordVisible by remember { mutableStateOf(false) }
 
     Column(
@@ -124,7 +145,7 @@ fun AccessPageInputField() {
                 containerColor = Color.White
             ),
             value = username,
-            onValueChange = { username = it },
+            onValueChange = { onUsernameChanged(it) },
             placeholder = { Text(text = "请输入账户") },
             label = { Text(text = "账户") },
             leadingIcon = { Icon(Icons.Outlined.AccountCircle, contentDescription = "account_circle") }
@@ -137,7 +158,7 @@ fun AccessPageInputField() {
                 containerColor = Color.White
             ),
             value = password,
-            onValueChange = { password = it },
+            onValueChange = { onPasswordChanged(it) },
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             placeholder = { Text(text = "请输入密码") },
             label = { Text(text = "密码") },
