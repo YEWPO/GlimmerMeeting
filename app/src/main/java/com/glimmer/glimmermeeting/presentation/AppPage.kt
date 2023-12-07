@@ -72,7 +72,7 @@ fun UserInfo() {
     Column(
         modifier = Modifier
             .padding(start = 16.dp, end = 16.dp, top = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(5.dp)
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Button(
             modifier = Modifier
@@ -81,8 +81,8 @@ fun UserInfo() {
             onClick = { }
         ) { }
         Column {
-            Text(text = "Name", fontSize = 22.sp, fontWeight = FontWeight.Bold)
-            Text(text = "Apartment", color = Color(0xFF808080))
+            Text(text = "陈佳华", fontSize = 22.sp, fontWeight = FontWeight.Bold)
+            Text(text = "电子科技大学", fontSize = 14.sp, color = Color(0xFF808080))
         }
     }
 }
