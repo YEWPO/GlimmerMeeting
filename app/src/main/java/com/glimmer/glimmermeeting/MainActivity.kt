@@ -12,7 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.glimmer.glimmermeeting.presentation.AccessPage
-import com.glimmer.glimmermeeting.presentation.MainPage
+import com.glimmer.glimmermeeting.presentation.AppPage
 import com.glimmer.glimmermeeting.ui.theme.GlimmerMeetingTheme
 
 class MainActivity : ComponentActivity() {
@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     when (pageState) {
                         "AccessPage" -> AccessPage(onPageStateChanged = { pageState = it })
-                        "AppPage" -> MainPage()
+                        "AppPage" -> AppPage()
                     }
                 }
             }

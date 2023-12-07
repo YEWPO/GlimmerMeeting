@@ -22,19 +22,19 @@ import androidx.compose.ui.unit.sp
 import com.glimmer.glimmermeeting.ui.theme.GlimmerMeetingTheme
 
 @Composable
-fun MainPage() {
+fun MainPage(onDrawerStageChanged: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        MainPageTopBar()
+        MainPageTopBar(onDrawerStageChanged = onDrawerStageChanged)
         FunctionCard()
         MyMeetingInfo()
     }
 }
 
 @Composable
-fun MainPageTopBar() {
+fun MainPageTopBar(onDrawerStageChanged: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -49,11 +49,11 @@ fun MainPageTopBar() {
                 modifier = Modifier
                     .size(60.dp)
                     .clip(CircleShape),
-                onClick = { /*TODO*/ }
+                onClick = { onDrawerStageChanged() }
             ) { }
             Column {
                 Text(text = "Name", fontSize = 22.sp, fontWeight = FontWeight.Bold)
-                Text(text = "Apartment", color = Color(0xff808080))
+                Text(text = "Apartment", color = Color(0xFF808080))
             }
         }
     }
@@ -82,6 +82,6 @@ fun MeetingInfoCard() {
 @Composable
 fun MainPagePreview() {
     GlimmerMeetingTheme {
-        MainPage()
+        MainPage({})
     }
 }
