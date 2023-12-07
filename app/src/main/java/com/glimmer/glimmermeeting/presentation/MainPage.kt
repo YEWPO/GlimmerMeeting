@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -68,26 +69,32 @@ fun MainPageTopBar(onDrawerStageChanged: () -> Unit) {
 
 @Composable
 fun FunctionCard() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, top = 30.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly
-    ) {
-        FunctionButton(
-            functionDescriptor = "扫一扫",
-            functionPainter = painterResource(id = R.drawable.scanner),
-            onFunctionClicked = {}
-        )
-        FunctionButton(
-            functionDescriptor = "预定会议",
-            functionPainter = painterResource(id = R.drawable.more),
-            onFunctionClicked = {}
-        )
-        FunctionButton(
-            functionDescriptor = "历史会议",
-            functionPainter = painterResource(id = R.drawable.history),
-            onFunctionClicked = {}
+    Column {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, end = 16.dp, top = 30.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            FunctionButton(
+                functionDescriptor = "扫码签到",
+                functionPainter = painterResource(id = R.drawable.scanner),
+                onFunctionClicked = {}
+            )
+            FunctionButton(
+                functionDescriptor = "预定会议",
+                functionPainter = painterResource(id = R.drawable.more),
+                onFunctionClicked = {}
+            )
+            FunctionButton(
+                functionDescriptor = "历史会议",
+                functionPainter = painterResource(id = R.drawable.history),
+                onFunctionClicked = {}
+            )
+        }
+        Divider(
+            modifier = Modifier
+                .padding(start = 16.dp, end = 16.dp, top = 20.dp)
         )
     }
 }
