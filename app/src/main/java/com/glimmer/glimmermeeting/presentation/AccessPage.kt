@@ -223,7 +223,7 @@ fun AccessPageActionField(
                 .fillMaxWidth()
                 .height(50.dp)
                 .padding(start = 40.dp, end = 40.dp),
-            onClick = { onPageStateChanged("MainPage") },
+            onClick = { onPageStateChanged("AppPage") },
             shape = RoundedCornerShape(10.dp)
         ) {
             Text(

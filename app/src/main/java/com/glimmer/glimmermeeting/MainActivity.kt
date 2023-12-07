@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     when (pageState) {
                         "AccessPage" -> AccessPage(onPageStateChanged = { pageState = it })
-                        "MainPage" -> MainPage()
+                        "AppPage" -> MainPage()
                     }
                 }
             }
