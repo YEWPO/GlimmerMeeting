@@ -12,9 +12,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.MailOutline
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -43,6 +47,7 @@ fun MainPage(onDrawerStageChanged: () -> Unit) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainPageTopBar(onDrawerStageChanged: () -> Unit) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -51,7 +56,8 @@ fun MainPageTopBar(onDrawerStageChanged: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp, top = 16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -73,10 +79,21 @@ fun MainPageTopBar(onDrawerStageChanged: () -> Unit) {
                 Text(text = "电子科技大学", fontSize = 14.sp, color = Color(0xFF808080))
             }
         }
-        Row(
-            verticalAlignment = Alignment.CenterVertically
+        BadgedBox(
+            modifier = Modifier
+                .padding(end = 20.dp),
+            badge = {
+                Badge {
+                    Text(text = "8")
+                }
+            }
         ) {
-
+            Icon(
+                modifier = Modifier
+                    .clickable {},
+                imageVector = Icons.Outlined.MailOutline,
+                contentDescription = "System Message"
+            )
         }
     }
 }
@@ -113,7 +130,6 @@ fun FunctionCard() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FunctionButton(
     functionDescriptor: String,
@@ -126,16 +142,13 @@ fun FunctionButton(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
-        Surface (
-            onClick = { onFunctionClicked() }
-        ) {
-            Image(
-                modifier = Modifier
-                    .size(60.dp),
-                painter = functionPainter,
-                contentDescription = functionDescriptor
-            )
-        }
+        Image(
+            modifier = Modifier
+                .size(60.dp)
+                .clickable { onFunctionClicked() },
+            painter = functionPainter,
+            contentDescription = functionDescriptor
+        )
         Text(text = functionDescriptor, fontSize = 14.sp)
     }
 }
