@@ -1,6 +1,7 @@
 package com.glimmer.glimmermeeting.presentation
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -8,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -39,8 +39,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.glimmer.glimmermeeting.R
+import com.glimmer.glimmermeeting.ui.theme.BlueDeep
+import com.glimmer.glimmermeeting.ui.theme.BlueLight
 import com.glimmer.glimmermeeting.ui.theme.GlimmerMeetingTheme
-import com.glimmer.glimmermeeting.ui.theme.PinkLight
 
 @Composable
 fun MainPage(onDrawerStageChanged: () -> Unit) {
@@ -151,7 +152,7 @@ fun FunctionButton(
     ) {
         Image(
             modifier = Modifier
-                .size(60.dp)
+                .size(50.dp)
                 .clickable { onFunctionClicked() },
             painter = functionPainter,
             contentDescription = functionDescriptor
@@ -195,13 +196,84 @@ fun MeetingInfoCard() {
     Card(
         modifier = Modifier
             .fillMaxSize()
-            .height(100.dp)
             .clip(RoundedCornerShape(8.dp)),
         colors = CardDefaults.cardColors(
-            containerColor = PinkLight
-        ),
+            containerColor = Color(0x10AAA0A6)
+        )
     ) {
-        Text(text = "card")
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(all = 14.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "综设进度汇报", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(text = "12:00", fontSize = 28.sp, fontWeight = FontWeight.Bold)
+                    Text(text = "GMT+08:00", fontSize = 14.sp, color = Color(0xFF808080))
+                }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(3.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.left_dots),
+                        contentDescription = "left-dots"
+                    )
+                    Card(
+                        modifier = Modifier
+                            .border(
+                                width = 1.dp,
+                                color = BlueDeep,
+                                shape = RoundedCornerShape(20.dp)
+                            ),
+                        colors = CardDefaults.cardColors(
+                            containerColor = BlueLight,
+                            contentColor = BlueDeep
+                        )
+                    ) {
+                        Text(
+                            modifier = Modifier
+                                .padding(all = 4.dp),
+                            text = "待开始",
+                            fontSize = 12.sp
+                        )
+                    }
+                    Image(
+                        painter = painterResource(id = R.drawable.right_dots),
+                        contentDescription = "right-dots"
+                    )
+                }
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(text = "14:00", fontSize = 28.sp, fontWeight = FontWeight.Bold)
+                    Text(text = "GMT+08:00", fontSize = 14.sp, color = Color(0xFF808080))
+                }
+            }
+            Divider()
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "会议室：信软楼西306", fontSize = 14.sp, color = Color(0xFF606060))
+            }
+        }
     }
 }
 
