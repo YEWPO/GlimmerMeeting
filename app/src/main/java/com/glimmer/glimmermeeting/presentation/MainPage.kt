@@ -79,7 +79,7 @@ fun MainPageTopBar(onDrawerStageChanged: () -> Unit) {
                         interactionSource = interactionSource,
                         indication = null
                     ) { onDrawerStageChanged() },
-                painter = painterResource(id = R.drawable.logo),
+                painter = painterResource(id = R.drawable.jiahua),
                 contentDescription = "User Avatar"
             )
             Column {

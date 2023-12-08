@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -12,6 +13,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -81,7 +84,7 @@ fun UserInfo() {
             modifier = Modifier
                 .size(80.dp)
                 .clip(CircleShape),
-            painter = painterResource(id = R.drawable.logo),
+            painter = painterResource(id = R.drawable.jiahua),
             contentDescription = "Drawer User Avatar"
         )
         Column {
@@ -91,9 +94,51 @@ fun UserInfo() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavigationList() {
-
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(start = 16.dp, end = 16.dp)
+    ) {
+        NavigationDrawerItem(
+            label = { Text(text = "我的个人信息", fontSize = 14.sp) },
+            icon = { Image(painter = painterResource(id = R.drawable.person), contentDescription = "Drawer Person")},
+            colors = NavigationDrawerItemDefaults.colors(
+                unselectedContainerColor = Color.White
+            ),
+            selected = false,
+            onClick = {}
+        )
+        NavigationDrawerItem(
+            label = { Text(text = "日历", fontSize = 14.sp) },
+            icon = { Image(painter = painterResource(id = R.drawable.calendar), contentDescription = "Drawer Calendar") },
+            colors = NavigationDrawerItemDefaults.colors(
+                unselectedContainerColor = Color.White
+            ),
+            selected = false,
+            onClick = {}
+        )
+        NavigationDrawerItem(
+            label = { Text(text = "会议室", fontSize = 14.sp) },
+            icon = { Image(painter = painterResource(id = R.drawable.room), contentDescription = "Drawer Room") },
+            colors = NavigationDrawerItemDefaults.colors(
+                unselectedContainerColor = Color.White
+            ),
+            selected = false,
+            onClick = {}
+        )
+        NavigationDrawerItem(
+            label = { Text(text = "设置", fontSize = 14.sp) },
+            icon = { Image(painter = painterResource(id = R.drawable.setting), contentDescription = "Drawer Setting") },
+            colors = NavigationDrawerItemDefaults.colors(
+                unselectedContainerColor = Color.White
+            ),
+            selected = false,
+            onClick = {}
+        )
+    }
 }
 
 @Preview(showBackground = true)
