@@ -8,14 +8,20 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.MailOutline
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -34,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.glimmer.glimmermeeting.R
 import com.glimmer.glimmermeeting.ui.theme.GlimmerMeetingTheme
+import com.glimmer.glimmermeeting.ui.theme.PinkLight
 
 @Composable
 fun MainPage(onDrawerStageChanged: () -> Unit) {
@@ -155,16 +162,47 @@ fun FunctionButton(
 
 @Composable
 fun MyMeetingInfo() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(start = 16.dp, end = 16.dp, top = 16.dp)
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        Text(text = "我的会议", fontSize = 22.sp, fontWeight = FontWeight.Bold)
+        repeat(4) {
+            MeetingInfoDayCard()
+        }
+    }
 }
 
 @Composable
 fun MeetingInfoDayCard() {
-
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text(text = "12月7日 星期四", fontSize = 14.sp, color = Color(0xFF707070))
+        repeat(2) {
+            MeetingInfoCard()
+        }
+    }
 }
 
 @Composable
 fun MeetingInfoCard() {
-
+    Card(
+        modifier = Modifier
+            .fillMaxSize()
+            .height(100.dp)
+            .clip(RoundedCornerShape(8.dp)),
+        colors = CardDefaults.cardColors(
+            containerColor = PinkLight
+        ),
+    ) {
+        Text(text = "card")
+    }
 }
 
 @Preview(showBackground = true)
