@@ -1,5 +1,6 @@
 package com.glimmer.glimmermeeting.presentation
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalNavigationDrawer
@@ -20,10 +20,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.glimmer.glimmermeeting.R
 import com.glimmer.glimmermeeting.ui.theme.GlimmerMeetingTheme
 import kotlinx.coroutines.launch
 
@@ -75,12 +77,13 @@ fun UserInfo() {
             .padding(start = 16.dp, end = 16.dp, top = 16.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        Button(
+        Image(
             modifier = Modifier
                 .size(80.dp)
                 .clip(CircleShape),
-            onClick = { }
-        ) { }
+            painter = painterResource(id = R.drawable.logo),
+            contentDescription = "Drawer User Avatar"
+        )
         Column {
             Text(text = "陈佳华", fontSize = 22.sp, fontWeight = FontWeight.Bold)
             Text(text = "电子科技大学", fontSize = 14.sp, color = Color(0xFF808080))
