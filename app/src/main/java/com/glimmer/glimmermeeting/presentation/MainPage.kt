@@ -97,7 +97,7 @@ fun FunctionCard() {
             )
             FunctionButton(
                 functionDescriptor = "预定会议",
-                functionPainter = painterResource(id = R.drawable.more),
+                functionPainter = painterResource(id = R.drawable.add),
                 onFunctionClicked = {}
             )
             FunctionButton(
