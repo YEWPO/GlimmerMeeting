@@ -65,7 +65,26 @@ fun SideDrawer() {
             .background(Color(0xFFFFFFFF))
     ) {
         UserInfo()
-        NavigationList()
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 12.dp, bottom = 16.dp),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            NavigationList()
+            VersionInfo()
+        }
+    }
+}
+
+@Composable
+fun VersionInfo() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = "Glimmer Meeting Version 0.0.1", fontSize = 12.sp)
     }
 }
 
@@ -83,6 +102,7 @@ fun UserInfo() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp, top = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
         Image(
             modifier = Modifier
@@ -120,8 +140,7 @@ fun UserInfo() {
 fun NavigationList() {
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(start = 16.dp, end = 16.dp)
+            .fillMaxWidth()
     ) {
         NavigationDrawerItem(
             label = { Text(text = "我的个人信息", fontSize = 14.sp) },
