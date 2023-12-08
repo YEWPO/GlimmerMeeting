@@ -2,10 +2,13 @@ package com.glimmer.glimmermeeting.presentation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -19,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -77,8 +81,8 @@ fun SideDrawerPreview() {
 fun UserInfo() {
     Column(
         modifier = Modifier
+            .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp, top = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Image(
             modifier = Modifier
@@ -87,9 +91,26 @@ fun UserInfo() {
             painter = painterResource(id = R.drawable.jiahua),
             contentDescription = "Drawer User Avatar"
         )
-        Column {
-            Text(text = "陈佳华", fontSize = 22.sp, fontWeight = FontWeight.Bold)
-            Text(text = "电子科技大学", fontSize = 14.sp, color = Color(0xFF808080))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Column {
+                    Text(text = "陈佳华", fontSize = 22.sp, fontWeight = FontWeight.Bold)
+                    Text(text = "电子科技大学", fontSize = 14.sp, color = Color(0xFF808080))
+                }
+            }
+            Image(
+                modifier = Modifier
+                    .clickable {},
+                painter = painterResource(id = R.drawable.qr),
+                contentDescription = "Drawer QR"
+            )
         }
     }
 }
