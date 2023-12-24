@@ -11,3 +11,5 @@ val Blue = Color(0xFF9EDDFF)
 val BlueGrey = Color(0xFFA6F6FF)
 val BlueLight = Color(0xFFBEFFF7)
 val PinkLight = Color(0xFFFAF0E6)
+
+val BackgroundColor = Color(0xFFF0F0F0)

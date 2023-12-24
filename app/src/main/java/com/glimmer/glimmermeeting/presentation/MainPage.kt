@@ -1,6 +1,7 @@
 package com.glimmer.glimmermeeting.presentation
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -31,8 +32,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,6 +51,10 @@ fun MainPage(onDrawerStageChanged: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .paint(
+                painter = painterResource(id = R.drawable.background),
+                contentScale = ContentScale.FillBounds
+            )
     ) {
         MainPageTopBar(onDrawerStageChanged = onDrawerStageChanged)
         FunctionCard()
@@ -112,7 +119,8 @@ fun FunctionCard() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp, top = 30.dp),
+                .padding(start = 16.dp, end = 16.dp, top = 24.dp)
+                .background(color = Color.White, shape = RoundedCornerShape(8.dp)),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             FunctionButton(
@@ -131,10 +139,6 @@ fun FunctionCard() {
                 onFunctionClicked = {}
             )
         }
-        Divider(
-            modifier = Modifier
-                .padding(start = 16.dp, end = 16.dp, top = 20.dp)
-        )
     }
 }
 
@@ -146,7 +150,8 @@ fun FunctionButton(
 ) {
     Column(
         modifier = Modifier
-            .width(100.dp),
+            .width(100.dp)
+            .padding(top = 12.dp, bottom = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
@@ -166,13 +171,18 @@ fun MyMeetingInfo() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(start = 16.dp, end = 16.dp, top = 16.dp)
-            .verticalScroll(rememberScrollState()),
+            .padding(start = 16.dp, end = 16.dp, top = 16.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Text(text = "我的会议", fontSize = 22.sp, fontWeight = FontWeight.Bold)
-        repeat(4) {
-            MeetingInfoDayCard()
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            repeat(4) {
+                MeetingInfoDayCard()
+            }
         }
     }
 }
@@ -198,7 +208,7 @@ fun MeetingInfoCard() {
             .fillMaxSize()
             .clip(RoundedCornerShape(8.dp)),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0x10AAA0A6)
+            containerColor = Color.White
         )
     ) {
         Column(
