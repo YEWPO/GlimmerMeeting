@@ -38,12 +38,14 @@ import com.glimmer.glimmermeeting.ui.theme.GlimmerMeetingTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MeetingDetailedPage() {
+fun MeetingDetailedPage(
+    onPageStateChanged: (String) -> Unit
+) {
     Column {
         CenterAlignedTopAppBar(
             title = { Text(text = "会议详情") },
             navigationIcon = {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { onPageStateChanged("MainPage") }) {
                     Icon(Icons.Outlined.ArrowBack, contentDescription = "Arrow Back")
                 }
             },
@@ -190,6 +192,6 @@ fun MeetingDetailedInfo() {
 @Composable
 fun MeetingPageDetailedPagePreview() {
     GlimmerMeetingTheme {
-        MeetingDetailedPage()
+        MeetingDetailedPage({})
     }
 }

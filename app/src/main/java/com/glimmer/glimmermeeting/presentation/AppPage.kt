@@ -63,7 +63,7 @@ fun AppPage() {
                 },
                 onPageStateChanged = { pageState = it }
             )
-            "MeetingDetailedPage" -> MeetingDetailedPage()
+            "MeetingDetailedPage" -> MeetingDetailedPage(onPageStateChanged = { pageState = it })
         }
     }
 }
