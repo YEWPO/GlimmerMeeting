@@ -47,7 +47,10 @@ import com.glimmer.glimmermeeting.ui.theme.BlueLight
 import com.glimmer.glimmermeeting.ui.theme.GlimmerMeetingTheme
 
 @Composable
-fun MainPage(onDrawerStageChanged: () -> Unit) {
+fun MainPage(
+    onDrawerStageChanged: () -> Unit,
+    onPageStateChanged: (String) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -58,7 +61,7 @@ fun MainPage(onDrawerStageChanged: () -> Unit) {
     ) {
         MainPageTopBar(onDrawerStageChanged = onDrawerStageChanged)
         FunctionCard()
-        MyMeetingInfo()
+        MyMeetingInfo(onPageStateChanged = onPageStateChanged)
     }
 }
 
@@ -167,7 +170,7 @@ fun FunctionButton(
 }
 
 @Composable
-fun MyMeetingInfo() {
+fun MyMeetingInfo(onPageStateChanged: (String) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -181,14 +184,14 @@ fun MyMeetingInfo() {
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             repeat(4) {
-                MeetingInfoDayCard()
+                MeetingInfoDayCard(onPageStateChanged = onPageStateChanged)
             }
         }
     }
 }
 
 @Composable
-fun MeetingInfoDayCard() {
+fun MeetingInfoDayCard(onPageStateChanged: (String) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -207,17 +210,18 @@ fun MeetingInfoDayCard() {
             Text(text = "12月7日 星期四", fontSize = 14.sp, color = Color(0xFF707070))
         }
         repeat(2) {
-            MeetingInfoCard()
+            MeetingInfoCard(onPageStateChanged = onPageStateChanged)
         }
     }
 }
 
 @Composable
-fun MeetingInfoCard() {
+fun MeetingInfoCard(onPageStateChanged: (String) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxSize()
-            .clip(RoundedCornerShape(8.dp)),
+            .clip(RoundedCornerShape(8.dp))
+            .clickable { onPageStateChanged("MeetingDetailedPage") },
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         )
@@ -302,6 +306,6 @@ fun MeetingInfoCard() {
 @Composable
 fun MainPagePreview() {
     GlimmerMeetingTheme {
-        MainPage({})
+        MainPage({}, {})
     }
 }
