@@ -194,7 +194,18 @@ fun MeetingInfoDayCard() {
             .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Text(text = "12月7日 星期四", fontSize = 14.sp, color = Color(0xFF707070))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(2.dp)
+        ) {
+            Icon(
+                modifier = Modifier
+                    .size(15.dp),
+                painter = painterResource(id = R.drawable.calendar_month),
+                contentDescription = "calendar"
+            )
+            Text(text = "12月7日 星期四", fontSize = 14.sp, color = Color(0xFF707070))
+        }
         repeat(2) {
             MeetingInfoCard()
         }
