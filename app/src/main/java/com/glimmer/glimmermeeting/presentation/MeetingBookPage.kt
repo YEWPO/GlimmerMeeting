@@ -25,6 +25,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -40,6 +41,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
@@ -201,7 +203,7 @@ fun MeetingBookInfoDurationPicker(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, top = 20.dp, bottom = 20.dp),
+            .padding(start = 16.dp, end = 16.dp, top = 30.dp, bottom = 50.dp),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         InfiniteCircularList(
@@ -241,7 +243,7 @@ fun MeetingBookInfoMeetingRoomPicker(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, top = 20.dp, bottom = 20.dp),
+            .padding(start = 16.dp, end = 16.dp, top = 30.dp, bottom = 50.dp),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         InfiniteCircularList(
@@ -295,6 +297,7 @@ fun MeetingBookInfo(
             meetingRoom = meetingRoom,
             showBottomSheet = showBottomSheet,
         )
+        MeetingBookOptions()
     }
 }
 
@@ -360,6 +363,49 @@ fun MeetingBookInfoPicker(
                 Text(text = meetingRoom)
                 Icon(Icons.Outlined.KeyboardArrowRight, contentDescription = "Date Picker")
             }
+        }
+    }
+}
+
+@Composable
+fun MeetingBookOptions() {
+    var calendarCheckState by remember { mutableStateOf(false) }
+    var signCheckState by remember { mutableStateOf(false) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.White)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, end = 16.dp, top = 6.dp, bottom = 6.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(text = "日程提醒")
+            Switch(
+                modifier = Modifier
+                    .scale(0.7f),
+                checked = calendarCheckState,
+                onCheckedChange = { calendarCheckState = it }
+            )
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, end = 16.dp, top = 6.dp, bottom = 6.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(text = "入会签到")
+            Switch(
+                modifier = Modifier
+                    .scale(0.7f),
+                checked = signCheckState,
+                onCheckedChange = { signCheckState = it }
+            )
         }
     }
 }
