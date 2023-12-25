@@ -1,13 +1,20 @@
 package com.glimmer.glimmermeeting.presentation
 
 import android.widget.Toast
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Check
@@ -25,6 +32,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,8 +41,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.glimmer.glimmermeeting.ui.theme.BlueDeep
@@ -50,6 +63,11 @@ fun MeetingBookPage(
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
     var bottomSheetInfo by remember { mutableStateOf("") }
+
+    var durationHours by remember { mutableStateOf(0) }
+    var durationMinutes by remember { mutableStateOf(30) }
+    var selectedDurationHours by remember { mutableStateOf(0) }
+    var selectedDurationMinutes by remember { mutableStateOf(30) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -79,6 +97,8 @@ fun MeetingBookPage(
             }
         )
         MeetingBookInfo(
+            durationHours = durationHours,
+            durationMinutes = durationMinutes,
             showBottomSheet = {
                 bottomSheetInfo = it
                 showBottomSheet = true
@@ -100,6 +120,8 @@ fun MeetingBookPage(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         IconButton(onClick = {
+                            selectedDurationHours = durationHours
+                            selectedDurationMinutes = durationMinutes
                             scope.launch { sheetState.hide() }.invokeOnCompletion {
                                 if (!sheetState.isVisible) {
                                     showBottomSheet = false
@@ -117,7 +139,15 @@ fun MeetingBookPage(
                                 else -> ""
                             }
                         )
-                        IconButton(onClick = { /*TODO*/ }) {
+                        IconButton(onClick = {
+                            durationHours = selectedDurationHours
+                            durationMinutes = selectedDurationMinutes
+                            scope.launch { sheetState.hide() }.invokeOnCompletion {
+                                if (!sheetState.isVisible) {
+                                    showBottomSheet = false
+                                }
+                            }
+                        }) {
                             Icon(
                                 Icons.Outlined.Check,
                                 contentDescription = "Date Check",
@@ -129,7 +159,12 @@ fun MeetingBookPage(
             ) {
                 when(bottomSheetInfo) {
                     "Date" -> MeetingBookInfoDatePicker()
-                    "Duration" -> MeetingBookInfoDurationPicker()
+                    "Duration" -> MeetingBookInfoDurationPicker(
+                        durationHours = durationHours,
+                        durationMinutes = durationMinutes,
+                        onDurationHoursChanged = { selectedDurationHours = it },
+                        onDurationMinutesChanged = { selectedDurationMinutes = it }
+                    )
                     "MeetingRoom" -> MeetingBookInfoMeetingRoomPicker()
                 }
             }
@@ -148,12 +183,44 @@ fun MeetingBookInfoDatePicker() {
 }
 
 @Composable
-fun MeetingBookInfoDurationPicker() {
-    Column(
+fun MeetingBookInfoDurationPicker(
+    durationHours: Int,
+    durationMinutes: Int,
+    onDurationHoursChanged: (Int) -> Unit,
+    onDurationMinutesChanged: (Int) -> Unit
+) {
+    Row(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp, top = 20.dp, bottom = 20.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        Text(text = "22222")
+        InfiniteCircularList(
+            width = 70.dp,
+            itemHeight = 40.dp,
+            items = (0..7).toMutableList(),
+            additionalText = "小时",
+            initialItem = durationHours,
+            textStyle = TextStyle(fontSize = 14.sp),
+            textColor = Color.LightGray,
+            selectedTextColor = Color.Black,
+            onItemSelected = { _, item ->
+                onDurationHoursChanged(item)
+            }
+        )
+        InfiniteCircularList(
+            width = 70.dp,
+            itemHeight = 40.dp,
+            items = (0..59).toMutableList(),
+            additionalText = "分钟",
+            initialItem = durationMinutes,
+            textStyle = TextStyle(fontSize = 14.sp),
+            textColor = Color.LightGray,
+            selectedTextColor = Color.Black,
+            onItemSelected = { _, item ->
+                onDurationMinutesChanged(item)
+            }
+        )
     }
 }
 
@@ -163,13 +230,14 @@ fun MeetingBookInfoMeetingRoomPicker() {
         modifier = Modifier
             .fillMaxWidth()
     ) {
-        Text(text = "33333")
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MeetingBookInfo(
+    durationHours: Int,
+    durationMinutes: Int,
     showBottomSheet: (String) -> Unit
 ) {
     var meetingTitle by remember { mutableStateOf("陈佳华预定的会议") }
@@ -192,12 +260,18 @@ fun MeetingBookInfo(
             value = meetingTitle,
             onValueChange = { meetingTitle = it }
         )
-        MeetingBookInfoPicker(showBottomSheet = showBottomSheet)
+        MeetingBookInfoPicker(
+            durationHours = durationHours,
+            durationMinutes = durationMinutes,
+            showBottomSheet = showBottomSheet
+        )
     }
 }
 
 @Composable
 fun MeetingBookInfoPicker(
+    durationHours: Int,
+    durationMinutes: Int,
     showBottomSheet: (String) -> Unit
 ) {
     Column(
@@ -235,7 +309,7 @@ fun MeetingBookInfoPicker(
                 horizontalArrangement = Arrangement.spacedBy(5.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "2小时")
+                Text(text = "${durationHours}小时${durationMinutes}分钟")
                 Icon(Icons.Outlined.KeyboardArrowRight, contentDescription = "Date Picker")
             }
         }
@@ -264,5 +338,85 @@ fun MeetingBookInfoPicker(
 fun MeetingBookPagePreview() {
     GlimmerMeetingTheme {
         MeetingBookPage({})
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun <T> InfiniteCircularList(
+    width: Dp,
+    itemHeight: Dp,
+    numberOfDisplayedItems: Int = 3,
+    items: List<T>,
+    additionalText: String,
+    initialItem: T,
+    itemScaleFact: Float = 1.5f,
+    textStyle: TextStyle,
+    textColor: Color,
+    selectedTextColor: Color,
+    onItemSelected: (index: Int, item: T) -> Unit = { _, _ -> }
+) {
+    val itemHalfHeight = LocalDensity.current.run { itemHeight.toPx() / 2f }
+    val scrollState = rememberLazyListState(0)
+    var lastSelectedIndex by remember {
+        mutableStateOf(0)
+    }
+    var itemsState by remember {
+        mutableStateOf(items)
+    }
+    LaunchedEffect(items) {
+        var targetIndex = items.indexOf(initialItem) - 1
+        targetIndex += ((Int.MAX_VALUE / 2) / items.size) * items.size
+        itemsState = items
+        lastSelectedIndex = targetIndex
+        scrollState.scrollToItem(targetIndex)
+    }
+    LazyColumn(
+        modifier = Modifier
+            .width(width)
+            .height(itemHeight * numberOfDisplayedItems),
+        state = scrollState,
+        flingBehavior = rememberSnapFlingBehavior(
+            lazyListState = scrollState
+        )
+    ) {
+        items(
+            count = Int.MAX_VALUE,
+            itemContent = { i ->
+                val item = itemsState[i % itemsState.size]
+                Box(
+                    modifier = Modifier
+                        .height(itemHeight)
+                        .fillMaxWidth()
+                        .onGloballyPositioned { coordinates ->
+                            val y = coordinates.positionInParent().y - itemHalfHeight
+                            val parentHalfHeight =
+                                (coordinates.parentCoordinates?.size?.height ?: 0) / 2f
+                            val isSelected =
+                                (y > parentHalfHeight - itemHalfHeight && y < parentHalfHeight + itemHalfHeight)
+                            if (isSelected && lastSelectedIndex != i) {
+                                onItemSelected(i % itemsState.size, item)
+                                lastSelectedIndex = i
+                            }
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = item.toString() + additionalText,
+                        style = textStyle,
+                        color = if (lastSelectedIndex == i) {
+                            selectedTextColor
+                        } else {
+                            textColor
+                        },
+                        fontSize = if (lastSelectedIndex == i) {
+                            textStyle.fontSize * itemScaleFact
+                        } else {
+                            textStyle.fontSize
+                        }
+                    )
+                }
+            }
+        )
     }
 }
