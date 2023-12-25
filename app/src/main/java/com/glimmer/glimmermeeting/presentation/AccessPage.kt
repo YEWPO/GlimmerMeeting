@@ -146,6 +146,7 @@ fun AccessPageInputField(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         TextField(
+            singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 30.dp, end = 30.dp, top = 30.dp),
@@ -159,6 +160,7 @@ fun AccessPageInputField(
             leadingIcon = { Icon(Icons.Outlined.AccountCircle, contentDescription = "account_circle") }
         )
         TextField(
+            singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 30.dp, end = 30.dp, top = 25.dp),
