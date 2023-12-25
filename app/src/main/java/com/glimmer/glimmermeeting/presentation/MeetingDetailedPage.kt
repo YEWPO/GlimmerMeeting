@@ -1,5 +1,6 @@
 package com.glimmer.glimmermeeting.presentation
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -13,7 +14,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Share
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -23,10 +28,15 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,12 +46,16 @@ import com.glimmer.glimmermeeting.R
 import com.glimmer.glimmermeeting.ui.theme.BlueDeep
 import com.glimmer.glimmermeeting.ui.theme.BlueLight
 import com.glimmer.glimmermeeting.ui.theme.GlimmerMeetingTheme
+import com.glimmer.glimmermeeting.ui.theme.PinkLight
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MeetingDetailedPage(
     onPageStateChanged: (String) -> Unit
 ) {
+    var openAlertDialog by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+
     Column {
         CenterAlignedTopAppBar(
             colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
@@ -54,15 +68,47 @@ fun MeetingDetailedPage(
                 }
             },
             actions = {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { }) {
                     Icon(Icons.Outlined.Share, contentDescription = "Share")
                 }
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(painter = painterResource(id = R.drawable.more), contentDescription = "more")
+                IconButton(onClick = { openAlertDialog = true }) {
+                    Icon(
+                        Icons.Outlined.Delete,
+                        contentDescription = "Delete Meeting",
+                        tint = Color.Red
+                    )
                 }
             }
         )
         MeetingDetailedInfo()
+
+        if (openAlertDialog) {
+            AlertDialog(
+                onDismissRequest = { openAlertDialog = false },
+                title = { Text(text = "删除会议", color = Color.Red) },
+                text = { Text(text = "你确定该操作吗？") },
+                confirmButton = {
+                    Button(
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = PinkLight,
+                            contentColor = Color.Black
+                        ),
+                        onClick = {
+                            Toast.makeText(context, "删除成功", Toast.LENGTH_SHORT).show()
+                            openAlertDialog = false
+                            onPageStateChanged("MainPage")
+                        }
+                    ) {
+                        Text(text = "是")
+                    }
+                },
+                dismissButton = {
+                    Button(onClick = { openAlertDialog = false }) {
+                        Text(text = "否", color = Color.Black)
+                    }
+                }
+            )
+        }
     }
 }
 
