@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,7 +14,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ExitToApp
+import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
@@ -28,7 +33,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -40,7 +47,9 @@ import com.glimmer.glimmermeeting.ui.theme.GlimmerMeetingTheme
 import kotlinx.coroutines.launch
 
 @Composable
-fun AppPage() {
+fun AppPage(
+    onPageStateChanged: (String) -> Unit
+) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -49,7 +58,7 @@ fun AppPage() {
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            SideDrawer()
+            SideDrawer(onPageStateChanged = onPageStateChanged)
         }
     ) {
         when(pageState) {
@@ -68,7 +77,9 @@ fun AppPage() {
 }
 
 @Composable
-fun SideDrawer() {
+fun SideDrawer(
+    onPageStateChanged: (String) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxHeight()
@@ -83,18 +94,30 @@ fun SideDrawer() {
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             NavigationList()
-            VersionInfo()
+            VersionInfo(onPageStateChanged = onPageStateChanged)
         }
     }
 }
 
 @Composable
-fun VersionInfo() {
+fun VersionInfo(
+    onPageStateChanged: (String) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
+        Button(
+            modifier = Modifier
+                .size(50.dp),
+            onClick = { onPageStateChanged("AccessPage") },
+            shape = CircleShape,
+            contentPadding = PaddingValues(0.dp)
+        ) {
+            Icon(Icons.Outlined.ExitToApp, contentDescription = "Logout")
+        }
         Text(text = "Glimmer Meeting Version 0.0.1", fontSize = 12.sp)
     }
 }
@@ -103,7 +126,7 @@ fun VersionInfo() {
 @Composable
 fun SideDrawerPreview() {
     GlimmerMeetingTheme {
-        SideDrawer()
+        SideDrawer({})
     }
 }
 
@@ -112,6 +135,11 @@ fun UserInfo() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .paint(
+                painter = painterResource(id = R.drawable.person_background),
+                contentScale = ContentScale.FillBounds,
+                alpha = 0.2f
+            )
             .padding(start = 16.dp, end = 16.dp, top = 16.dp),
         verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
@@ -195,6 +223,6 @@ fun NavigationList() {
 @Composable
 fun AppPagePreview() {
     GlimmerMeetingTheme {
-        AppPage()
+        AppPage({})
     }
 }
