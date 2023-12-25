@@ -1,11 +1,16 @@
 package com.glimmer.glimmermeeting.presentation
 
 import android.widget.Toast
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -13,7 +18,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -82,11 +86,70 @@ fun MeetingBookInfo() {
             modifier = Modifier
                 .fillMaxWidth(),
             colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color.White
+                containerColor = Color.White,
+                unfocusedIndicatorColor = Color.White,
+                focusedIndicatorColor = Color.White
             ),
             value = meetingTitle,
             onValueChange = { meetingTitle = it }
         )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { }
+                    .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(text = "开始时间")
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(5.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = "11:00")
+                    Icon(Icons.Outlined.KeyboardArrowRight, contentDescription = "Date Picker")
+                }
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { }
+                    .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(text = "会议时长")
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(5.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = "2小时")
+                    Icon(Icons.Outlined.KeyboardArrowRight, contentDescription = "Date Picker")
+                }
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { }
+                    .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(text = "会议室")
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(5.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = "信软楼西306")
+                    Icon(Icons.Outlined.KeyboardArrowRight, contentDescription = "Date Picker")
+                }
+            }
+        }
     }
 }
 
