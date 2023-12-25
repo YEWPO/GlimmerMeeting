@@ -60,8 +60,7 @@ fun AccessPage(
                 painter = painterResource(id = R.drawable.access_background),
                 contentScale = ContentScale.FillWidth,
                 alpha = 0.5f,
-                alignment =
-                Alignment.TopCenter
+                alignment = Alignment.TopCenter
             )
     ) {
         AccessPageTitle()

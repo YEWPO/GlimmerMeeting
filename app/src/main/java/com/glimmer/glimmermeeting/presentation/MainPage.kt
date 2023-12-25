@@ -56,7 +56,8 @@ fun MainPage(
             .fillMaxSize()
             .paint(
                 painter = painterResource(id = R.drawable.background),
-                contentScale = ContentScale.FillBounds
+                contentScale = ContentScale.FillBounds,
+                alpha = 0.4f
             )
     ) {
         MainPageTopBar(onDrawerStageChanged = onDrawerStageChanged)
