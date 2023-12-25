@@ -64,6 +64,7 @@ fun AppPage() {
                 onPageStateChanged = { pageState = it }
             )
             "MeetingDetailedPage" -> MeetingDetailedPage(onPageStateChanged = { pageState = it })
+            "MeetingBookPage" -> MeetingBookPage(onPageStateChanged = { pageState = it })
         }
     }
 }

@@ -61,7 +61,7 @@ fun MainPage(
             )
     ) {
         MainPageTopBar(onDrawerStageChanged = onDrawerStageChanged)
-        FunctionCard()
+        FunctionCard(onPageStateChanged = onPageStateChanged)
         MyMeetingInfo(onPageStateChanged = onPageStateChanged)
     }
 }
@@ -118,7 +118,9 @@ fun MainPageTopBar(onDrawerStageChanged: () -> Unit) {
 }
 
 @Composable
-fun FunctionCard() {
+fun FunctionCard(
+    onPageStateChanged: (String) -> Unit
+) {
     Column {
         Row(
             modifier = Modifier
@@ -135,7 +137,7 @@ fun FunctionCard() {
             FunctionButton(
                 functionDescriptor = "预定会议",
                 functionPainter = painterResource(id = R.drawable.add),
-                onFunctionClicked = {}
+                onFunctionClicked = { onPageStateChanged("MeetingBookPage") }
             )
             FunctionButton(
                 functionDescriptor = "历史会议",
