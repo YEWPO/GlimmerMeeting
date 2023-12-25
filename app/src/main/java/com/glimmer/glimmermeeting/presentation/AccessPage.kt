@@ -150,8 +150,10 @@ fun AccessPageInputField(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 30.dp, end = 30.dp, top = 30.dp),
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color.White
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White,
+                disabledContainerColor = Color.White,
             ),
             value = username,
             onValueChange = { onUsernameChanged(it) },
@@ -164,8 +166,10 @@ fun AccessPageInputField(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 30.dp, end = 30.dp, top = 25.dp),
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color.White
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White,
+                disabledContainerColor = Color.White,
             ),
             value = password,
             onValueChange = { onPasswordChanged(it) },

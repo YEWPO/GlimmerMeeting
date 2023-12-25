@@ -69,6 +69,9 @@ fun MeetingBookPage(
     var selectedDurationHours by remember { mutableStateOf(0) }
     var selectedDurationMinutes by remember { mutableStateOf(30) }
 
+    var meetingRoom by remember { mutableStateOf("信软楼西306") }
+    var selectedMeetingRoom by remember { mutableStateOf("信软楼西306") }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -99,6 +102,7 @@ fun MeetingBookPage(
         MeetingBookInfo(
             durationHours = durationHours,
             durationMinutes = durationMinutes,
+            meetingRoom = meetingRoom,
             showBottomSheet = {
                 bottomSheetInfo = it
                 showBottomSheet = true
@@ -122,6 +126,7 @@ fun MeetingBookPage(
                         IconButton(onClick = {
                             selectedDurationHours = durationHours
                             selectedDurationMinutes = durationMinutes
+                            selectedMeetingRoom = meetingRoom
                             scope.launch { sheetState.hide() }.invokeOnCompletion {
                                 if (!sheetState.isVisible) {
                                     showBottomSheet = false
@@ -142,6 +147,7 @@ fun MeetingBookPage(
                         IconButton(onClick = {
                             durationHours = selectedDurationHours
                             durationMinutes = selectedDurationMinutes
+                            meetingRoom = selectedMeetingRoom
                             scope.launch { sheetState.hide() }.invokeOnCompletion {
                                 if (!sheetState.isVisible) {
                                     showBottomSheet = false
@@ -165,7 +171,10 @@ fun MeetingBookPage(
                         onDurationHoursChanged = { selectedDurationHours = it },
                         onDurationMinutesChanged = { selectedDurationMinutes = it }
                     )
-                    "MeetingRoom" -> MeetingBookInfoMeetingRoomPicker()
+                    "MeetingRoom" -> MeetingBookInfoMeetingRoomPicker(
+                        meetingRoom = meetingRoom,
+                        onMeetingRoomChanged = { selectedMeetingRoom = it }
+                    )
                 }
             }
         }
@@ -225,19 +234,37 @@ fun MeetingBookInfoDurationPicker(
 }
 
 @Composable
-fun MeetingBookInfoMeetingRoomPicker() {
-    Column(
+fun MeetingBookInfoMeetingRoomPicker(
+    meetingRoom: String,
+    onMeetingRoomChanged: (String) -> Unit
+) {
+    Row(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp, top = 20.dp, bottom = 20.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly
     ) {
+        InfiniteCircularList(
+            width = 150.dp,
+            itemHeight = 40.dp,
+            items = listOf("信软楼西306", "三教401", "二教110", "一教103"),
+            additionalText = "",
+            initialItem = meetingRoom,
+            textStyle = TextStyle(fontSize = 14.sp),
+            textColor = Color.LightGray,
+            selectedTextColor = Color.Black,
+            onItemSelected = { _, item ->
+                onMeetingRoomChanged(item)
+            }
+        )
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MeetingBookInfo(
     durationHours: Int,
     durationMinutes: Int,
+    meetingRoom: String,
     showBottomSheet: (String) -> Unit
 ) {
     var meetingTitle by remember { mutableStateOf("陈佳华预定的会议") }
@@ -252,10 +279,12 @@ fun MeetingBookInfo(
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth(),
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color.White,
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White,
+                disabledContainerColor = Color.White,
+                focusedIndicatorColor = Color.White,
                 unfocusedIndicatorColor = Color.White,
-                focusedIndicatorColor = Color.White
             ),
             value = meetingTitle,
             onValueChange = { meetingTitle = it }
@@ -263,7 +292,8 @@ fun MeetingBookInfo(
         MeetingBookInfoPicker(
             durationHours = durationHours,
             durationMinutes = durationMinutes,
-            showBottomSheet = showBottomSheet
+            meetingRoom = meetingRoom,
+            showBottomSheet = showBottomSheet,
         )
     }
 }
@@ -272,6 +302,7 @@ fun MeetingBookInfo(
 fun MeetingBookInfoPicker(
     durationHours: Int,
     durationMinutes: Int,
+    meetingRoom: String,
     showBottomSheet: (String) -> Unit
 ) {
     Column(
@@ -292,7 +323,7 @@ fun MeetingBookInfoPicker(
                 horizontalArrangement = Arrangement.spacedBy(5.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "11:00")
+                Text(text = "12:00")
                 Icon(Icons.Outlined.KeyboardArrowRight, contentDescription = "Date Picker")
             }
         }
@@ -326,7 +357,7 @@ fun MeetingBookInfoPicker(
                 horizontalArrangement = Arrangement.spacedBy(5.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "信软楼西306")
+                Text(text = meetingRoom)
                 Icon(Icons.Outlined.KeyboardArrowRight, contentDescription = "Date Picker")
             }
         }
