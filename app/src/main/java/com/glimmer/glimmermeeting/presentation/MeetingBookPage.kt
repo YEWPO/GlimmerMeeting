@@ -66,6 +66,11 @@ fun MeetingBookPage(
     var showBottomSheet by remember { mutableStateOf(false) }
     var bottomSheetInfo by remember { mutableStateOf("") }
 
+    var startHour by remember { mutableStateOf(12) }
+    var startMinute by remember { mutableStateOf(0) }
+    var selectedStartHour by remember { mutableStateOf(12) }
+    var selectedStartMinute by remember { mutableStateOf(0) }
+
     var durationHours by remember { mutableStateOf(0) }
     var durationMinutes by remember { mutableStateOf(30) }
     var selectedDurationHours by remember { mutableStateOf(0) }
@@ -102,6 +107,8 @@ fun MeetingBookPage(
             }
         )
         MeetingBookInfo(
+            startHour = startHour,
+            startMinute = startMinute,
             durationHours = durationHours,
             durationMinutes = durationMinutes,
             meetingRoom = meetingRoom,
@@ -126,6 +133,8 @@ fun MeetingBookPage(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         IconButton(onClick = {
+                            selectedStartHour = startHour
+                            selectedStartMinute = startMinute
                             selectedDurationHours = durationHours
                             selectedDurationMinutes = durationMinutes
                             selectedMeetingRoom = meetingRoom
@@ -140,13 +149,15 @@ fun MeetingBookPage(
                         Text(
                             fontSize = 20.sp,
                             text = when(bottomSheetInfo) {
-                                "Date" -> "开始时间"
+                                "Time" -> "开始时间"
                                 "Duration" -> "会议时长"
                                 "MeetingRoom" -> "会议室"
                                 else -> ""
                             }
                         )
                         IconButton(onClick = {
+                            startHour = selectedStartHour
+                            startMinute = selectedStartMinute
                             durationHours = selectedDurationHours
                             durationMinutes = selectedDurationMinutes
                             meetingRoom = selectedMeetingRoom
@@ -166,7 +177,12 @@ fun MeetingBookPage(
                 }
             ) {
                 when(bottomSheetInfo) {
-                    "Date" -> MeetingBookInfoDatePicker()
+                    "Time" -> MeetingBookInfoDatePicker(
+                        startHours = startHour,
+                        startMinutes = startMinute,
+                        onStartHoursChanged = { selectedStartHour = it },
+                        onStartMinutesChanged = { selectedStartMinute = it }
+                    )
                     "Duration" -> MeetingBookInfoDurationPicker(
                         durationHours = durationHours,
                         durationMinutes = durationMinutes,
@@ -184,12 +200,44 @@ fun MeetingBookPage(
 }
 
 @Composable
-fun MeetingBookInfoDatePicker() {
-    Column(
+fun MeetingBookInfoDatePicker(
+    startHours: Int,
+    startMinutes: Int,
+    onStartHoursChanged: (Int) -> Unit,
+    onStartMinutesChanged: (Int) -> Unit
+) {
+    Row(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp, top = 30.dp, bottom = 50.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        Text(text = "11111")
+        InfiniteCircularList(
+            width = 70.dp,
+            itemHeight = 40.dp,
+            items = (0..23).toMutableList(),
+            additionalText = "时",
+            initialItem = startHours,
+            textStyle = TextStyle(fontSize = 14.sp),
+            textColor = Color.LightGray,
+            selectedTextColor = Color.Black,
+            onItemSelected = { _, item ->
+                onStartHoursChanged(item)
+            }
+        )
+        InfiniteCircularList(
+            width = 70.dp,
+            itemHeight = 40.dp,
+            items = (0..59).toMutableList(),
+            additionalText = "分",
+            initialItem = startMinutes,
+            textStyle = TextStyle(fontSize = 14.sp),
+            textColor = Color.LightGray,
+            selectedTextColor = Color.Black,
+            onItemSelected = { _, item ->
+                onStartMinutesChanged(item)
+            }
+        )
     }
 }
 
@@ -264,6 +312,8 @@ fun MeetingBookInfoMeetingRoomPicker(
 
 @Composable
 fun MeetingBookInfo(
+    startHour: Int,
+    startMinute: Int,
     durationHours: Int,
     durationMinutes: Int,
     meetingRoom: String,
@@ -292,6 +342,8 @@ fun MeetingBookInfo(
             onValueChange = { meetingTitle = it }
         )
         MeetingBookInfoPicker(
+            startHour = startHour,
+            startMinute = startMinute,
             durationHours = durationHours,
             durationMinutes = durationMinutes,
             meetingRoom = meetingRoom,
@@ -303,6 +355,8 @@ fun MeetingBookInfo(
 
 @Composable
 fun MeetingBookInfoPicker(
+    startHour: Int,
+    startMinute: Int,
     durationHours: Int,
     durationMinutes: Int,
     meetingRoom: String,
@@ -321,13 +375,30 @@ fun MeetingBookInfoPicker(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
+            Text(text = "会议日期")
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(5.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "2023年12月7日")
+                Icon(Icons.Outlined.KeyboardArrowRight, contentDescription = "Date Picker")
+            }
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { showBottomSheet("Time") }
+                .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
             Text(text = "开始时间")
             Row(
                 horizontalArrangement = Arrangement.spacedBy(5.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "12:00")
-                Icon(Icons.Outlined.KeyboardArrowRight, contentDescription = "Date Picker")
+                Text(text = "${startHour}:" + String.format("%02d", startMinute))
+                Icon(Icons.Outlined.KeyboardArrowRight, contentDescription = "Time Picker")
             }
         }
         Row(
