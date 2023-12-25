@@ -40,7 +40,6 @@ import com.glimmer.glimmermeeting.R
 import com.glimmer.glimmermeeting.ui.theme.GlimmerMeetingTheme
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppPage() {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -148,7 +147,6 @@ fun UserInfo() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavigationList() {
     Column(
