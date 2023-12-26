@@ -26,9 +26,15 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -51,18 +57,52 @@ fun MainPage(
     onDrawerStageChanged: () -> Unit,
     onPageStateChanged: (String) -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .paint(
-                painter = painterResource(id = R.drawable.background),
-                contentScale = ContentScale.FillBounds,
-                alpha = 0.4f
-            )
+    var selectedPage by remember { mutableStateOf(0) }
+
+    Scaffold(
+        bottomBar = {
+            NavigationBar {
+                NavigationBarItem(
+                    selected = selectedPage == 0,
+                    label = { Text(text = "会议列表") },
+                    onClick = { selectedPage = 0 },
+                    icon = { Image(painter = painterResource(id = R.drawable.list), contentDescription = "Meeting List") }
+                )
+                NavigationBarItem(
+                    selected = selectedPage == 1,
+                    label = { Text(text = "日历") },
+                    onClick = { selectedPage = 1 },
+                    icon = { Image(painter = painterResource(id = R.drawable.calendar), contentDescription = "Calendar") }
+                )
+                NavigationBarItem(
+                    selected = selectedPage == 2,
+                    label = { Text(text = "会议室") },
+                    onClick = { selectedPage = 2 },
+                    icon = { Image(painter = painterResource(id = R.drawable.meeting), contentDescription = "Meeting") }
+                )
+                NavigationBarItem(
+                    selected = selectedPage == 3,
+                    label = { Text(text = "云文档") },
+                    onClick = { selectedPage = 3 },
+                    icon = { Image(painter = painterResource(id = R.drawable.doc), contentDescription = "Doc") }
+                )
+            }
+        }
     ) {
-        MainPageTopBar(onDrawerStageChanged = onDrawerStageChanged)
-        FunctionCard(onPageStateChanged = onPageStateChanged)
-        MyMeetingInfo(onPageStateChanged = onPageStateChanged)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
+                .paint(
+                    painterResource(id = R.drawable.background),
+                    alpha = 0.4f,
+                    contentScale = ContentScale.FillBounds
+                ),
+        ) {
+            MainPageTopBar(onDrawerStageChanged = onDrawerStageChanged)
+            FunctionCard(onPageStateChanged = onPageStateChanged)
+            MyMeetingInfo(onPageStateChanged = onPageStateChanged)
+        }
     }
 }
 
