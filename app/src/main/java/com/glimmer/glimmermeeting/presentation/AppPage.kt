@@ -107,7 +107,7 @@ fun VersionInfo(
         modifier = Modifier
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        verticalArrangement = Arrangement.spacedBy(30.dp)
     ) {
         Button(
             modifier = Modifier
@@ -118,7 +118,7 @@ fun VersionInfo(
         ) {
             Icon(Icons.Outlined.ExitToApp, contentDescription = "Logout")
         }
-        Text(text = "Glimmer Meeting Version 0.0.1", fontSize = 12.sp)
+        Text(text = "Glimmer Meeting Version 2.1.0", fontSize = 12.sp)
     }
 }
 
@@ -140,7 +140,7 @@ fun UserInfo() {
                 contentScale = ContentScale.FillBounds,
                 alpha = 0.2f
             )
-            .padding(start = 16.dp, end = 16.dp, top = 16.dp),
+            .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 16.dp),
         verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
         Image(
@@ -190,8 +190,8 @@ fun NavigationList() {
             onClick = {}
         )
         NavigationDrawerItem(
-            label = { Text(text = "日历", fontSize = 14.sp) },
-            icon = { Image(painter = painterResource(id = R.drawable.calendar), contentDescription = "Drawer Calendar") },
+            label = { Text(text = "帮助与客服", fontSize = 14.sp) },
+            icon = { Image(painter = painterResource(id = R.drawable.help), contentDescription = "Drawer Calendar") },
             colors = NavigationDrawerItemDefaults.colors(
                 unselectedContainerColor = Color.White
             ),
@@ -199,8 +199,8 @@ fun NavigationList() {
             onClick = {}
         )
         NavigationDrawerItem(
-            label = { Text(text = "会议室", fontSize = 14.sp) },
-            icon = { Image(painter = painterResource(id = R.drawable.room), contentDescription = "Drawer Room") },
+            label = { Text(text = "设备管理", fontSize = 14.sp) },
+            icon = { Image(painter = painterResource(id = R.drawable.phone), contentDescription = "Drawer Room") },
             colors = NavigationDrawerItemDefaults.colors(
                 unselectedContainerColor = Color.White
             ),
